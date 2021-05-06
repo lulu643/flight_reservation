@@ -1,0 +1,5 @@
+Flask~=1.1.2
+Werkzeug~=1.0.1
+SQLAlchemy~=1.4.11
+passlib~=1.7.4
+PyMySQL~=1.0.2
