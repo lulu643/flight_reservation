@@ -64,6 +64,7 @@ def viewMyFlights():
         cursor.close()
 
         return render_template('viewMyFlights.html', flights=data1, role='customer')
+
     elif session['role'] == 'agent':
 
         email = session['email']
@@ -125,7 +126,7 @@ def search_for_flights():
     if return_date:
         if datetime.datetime.strptime(dept_date, "%Y-%m-%d") > datetime.datetime.strptime(return_date, "%Y-%m-%d"):
             return render_template("searchForFlights.html", error="The dates you entered are invalid.")
-        query2 = "select * from flight natural join airplane, airport as A, airport as B where flight.departure_airport = A.airport_name and flight.arrival_airport = B.airport_name and (A.airport_name = %s or A.airport_city = %s) and (B.airport_name = %s or B.airport_city = %s) and date(dept_time) = %s "
+        query2 = "select * from flight natural join airplane, airport as A, airport as B where flight.departure_airport = A.airport_name and flight.arrival_airport = B.airport_name and (A.airport_name = %s or A.airport_city = %s) and (B.airport_name = %s or B.airport_city = %s) and date(departure_time) = %s "
         cursor.execute(query2, (arrival_airport, arrival_airport, departure_airport, departure_airport, return_date))
 
     # store the results

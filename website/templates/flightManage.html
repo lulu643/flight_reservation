@@ -57,19 +57,19 @@
             <h4> View Options </h4>
             <div class="inputBlock">
                 <label for="dept_from">place of departure:</label>
-                <input type="text" name = "dept_from" required/> </br>
+                <input type="text" name = "dept_from" required id="dept_from"/> </br>
             </div>
             <div class="inputBlock">
                 <label for="arr_at">destination:</label>
-                <input type="text" name = "arr_at" required/></br>
+                <input type="text" name = "arr_at" required id="arr_at"/></br>
             </div>
             <div class="inputBlock">
                 <label for="start_date">departure start date:</label>
-                <input type="date" name = "start_date" required/></br>
+                <input type="date" name = "start_date" required id="start_date"/></br>
             </div>
             <div class="inputBlock">
                 <label for="end_date">departure end date:</label>
-                <input type="date" name = "end_date" required/></br>
+                <input type="date" name = "end_date" required id="end_date"/></br>
             </div>
             <input type="submit" value = View> <br>
         </form>
@@ -102,21 +102,21 @@
                 <tr>
                     <td>{{line['airline_name']}}</td>
                     <td>{{line['flight_num']}}</td>
-                    <td>{{line['dept_time']}}</td>
-                    <td>{{line['arr_time']}}</td>
-                    <td>{{line['base_price']}}</td>
-                    <td>{{line['flight_status']}}</td>
-                    <td>{{line['dept_from']}}</td>
-                    <td>{{line['arr_at']}}</td>
+                    <td>{{line['departure_time']}}</td>
+                    <td>{{line['arrival_time']}}</td>
+                    <td>{{line['price']}}</td>
+                    <td>{{line['status']}}</td>
+                    <td>{{line['departure_airport']}}</td>
+                    <td>{{line['arrival_airport']}}</td>
                     <td>{{line['airplane_id']}}</td>
                     <td>
-                        <a href = "/updateFlight/{{line['flight_num']}}/{{line['dept_time']}}"> Update Flight </a>
+                        <a href = "/updateFlight/{{line['flight_num']}}#"> Update Flight </a>
                     </td>
                     <td>
-                        <a href = "/viewPassengers/{{line['flight_num']}}/{{line['dept_time']}}"> View Passengers </a>
+                        <a href = "/viewPassengers/{{line['flight_num']}}"> View Passengers </a>
                     </td>
                     <td>
-                        <a href = "/report/viewRatings/{{line['flight_num']}}/{{line['dept_time']}}"> View Ratings </a>
+                        <a href = "/report/viewRatings/{{line['flight_num']}}"> View Ratings </a>
                     </td>
                 </tr>
             {% endfor %}
@@ -139,31 +139,31 @@
         <form action = "/addFlight" method = "POST">
             <div class="inputBlock">
                 <label for="flight_num1">flight number:</label>
-                <input type="text" name = "flight_num1" required/> </br>
+                <input type="text" name = "flight_num1" required id="flight_num1"/> <br>
             </div>
             <div class="inputBlock">
                 <label for="dept_time1">departure time:</label>
-                <input type="datetime-local" step = "1" name = "dept_time1" required/></br>
+                <input type="datetime-local" step = "1" name = "dept_time1" required id="dept_time1"/><br>
             </div>
             <div class="inputBlock">
                 <label for="arr_time1">arrival time:</label>
-                <input type="datetime-local" step = "1" name = "arr_time1" required/></br>
+                <input type="datetime-local" step = "1" name = "arr_time1" required id="arr_time1"/><br>
             </div>
             <div class="inputBlock">
                 <label for="base_price1">base price:</label>
-                <input type="text" name = "base_price1" required/> </br>
+                <input type="text" name = "base_price1" required id="base_price1"/> <br>
             </div>
             <div class="inputBlock">
                 <label for="dept_from1">place of departure:</label>
-                <input type="text" name = "dept_from1" required/> </br>
+                <input type="text" name = "dept_from1" required id="dept_from1"/> <br>
             </div>
             <div class="inputBlock">
                 <label for="arr_at1">destination:</label>
-                <input type="text" name = "arr_at1" required/></br>
+                <input type="text" name = "arr_at1" required id="arr_at1"/><br>
             </div>
             <div class="inputBlock">
                 <label for="airplane_id1">airplane id:</label>
-                <input type="text" name = "airplane_id1" required/></br>
+                <input type="text" name = "airplane_id1" required id="airplane_id1"/><br>
             </div>
             <input type="submit" value = Add> <br>
         </form>
