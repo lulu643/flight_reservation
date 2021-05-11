@@ -85,7 +85,7 @@ def viewMyFlights():
 
         cursor.close()
 
-    return render_template('viewMyFlights.html', flights=data1, role='agent')
+    return render_template('viewMyFlights.html', flights=data1, role=session["role"])
 
 
 
@@ -208,7 +208,7 @@ def purchaseTickets():
         cursor.close()
 
 
-    return render_template("purchaseTickets.html", flight = data_1)
+    return render_template("purchaseTickets.html", flight = data_1, role=session["role"])
 
 
 
