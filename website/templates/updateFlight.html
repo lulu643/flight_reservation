@@ -1,11 +1,17 @@
-{% extends 'layout.html' %}
+{% extends 'layout.html' %} {% block body %}
 
-{% block body %}
-
-<nav class="navbar navbar-light" style="background-color: #e3f2fd;">
+<nav class="navbar navbar-light" style="background-color: #e3f2fd">
   <div class="container-fluid">
     <a class="navbar-brand" href="#">StaffHome</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -17,27 +23,41 @@
           <a class="nav-link active" href="/flightManage">Flights Management</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link active" href="/airSystemManage/airplane">Airplanes Management</a>
-        </li>
-          <li class="nav-item">
-          <a class="nav-link active" href="/airSystemManage/airport">Airports Management</a>
-        </li>
-          <li class="nav-item">
-          <a class="nav-link active" href="/report/topAgent">View Top Booking Agents</a>
-        </li>
-          <li class="nav-item">
-          <a class="nav-link active" href="/report/topCustomer">View Top Customers</a>
-        </li>
-         <li class="nav-item">
-          <a class="nav-link active" href="/report/salesReport/default">View Reports</a>
-        </li>
-         <li class="nav-item">
-          <a class="nav-link active" href="/report/revenueCompare">Revenue Comparison</a>
+          <a class="nav-link active" href="/airSystemManage/airplane"
+            >Airplanes Management</a
+          >
         </li>
         <li class="nav-item">
-          <a class="nav-link active" href="/report/topDestination">Top Destination</a>
+          <a class="nav-link active" href="/airSystemManage/airport"
+            >Airports Management</a
+          >
         </li>
-          <li class="nav-item">
+        <li class="nav-item">
+          <a class="nav-link active" href="/report/topAgent"
+            >View Top Booking Agents</a
+          >
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="/report/topCustomer"
+            >View Top Customers</a
+          >
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="/report/salesReport/default"
+            >View Reports</a
+          >
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="/report/revenueCompare"
+            >Revenue Comparison</a
+          >
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="/report/topDestination"
+            >Top Destination</a
+          >
+        </li>
+        <li class="nav-item">
           <a class="nav-link active" href="/logout">Log out</a>
         </li>
       </ul>
@@ -45,57 +65,57 @@
   </div>
 </nav>
 
-
-
 {% if flight %}
 <div class="content">
-    <div class="title staff"> Update the Following Flights: </div>
-    <table id = "flight_prev">
-            <th> Airline Name </th>
-            <th> Flight Number </th>
-            <th> Departure Time </th>
-            <th> Arrival Time </th>
-            <th> Base Price </th>
-            <th> Flight Status </th>
-            <th> Departure from </th>
-            <th> Arrive at</th>
-            <th> Airplane id </th>
-        <tr>
-            <td class="flight_prev">{{flight["airline_name"]}}</td>
-            <td class="flight_prev">{{flight['flight_num']}}</td>
-            <td class="flight_prev">{{flight['departure_time']}}</td>
-            <td class="flight_prev">{{flight['arrival_time']}}</td>
-            <td class="flight_prev">{{flight['price']}}</td>
-            <td class="flight_prev">{{flight['status']}}</td>
-            <td class="flight_prev">{{flight['departure_airport']}}</td>
-            <td class="flight_prev">{{flight['arrival_airport']}}</td>
-            <td class="flight_prev">{{flight['airplane_id']}}</td>
-        </tr>
-    </table>
+  <div class="title staff">Update the Following Flights:</div>
+  <table id="flight_prev">
+    <th>Airline Name</th>
+    <th>Flight Number</th>
+    <th>Departure Time</th>
+    <th>Arrival Time</th>
+    <th>Base Price</th>
+    <th>Flight Status</th>
+    <th>Departure from</th>
+    <th>Arrive at</th>
+    <th>Airplane id</th>
+    <tr>
+      <td class="flight_prev">{{flight["airline_name"]}}</td>
+      <td class="flight_prev">{{flight['flight_num']}}</td>
+      <td class="flight_prev">{{flight['departure_time']}}</td>
+      <td class="flight_prev">{{flight['arrival_time']}}</td>
+      <td class="flight_prev">{{flight['price']}}</td>
+      <td class="flight_prev">{{flight['status']}}</td>
+      <td class="flight_prev">{{flight['departure_airport']}}</td>
+      <td class="flight_prev">{{flight['arrival_airport']}}</td>
+      <td class="flight_prev">{{flight['airplane_id']}}</td>
+    </tr>
+  </table>
 
-    <form class="update_flight" action="/updateFlight/{{flight['flight_num']}}#" method="POST">
-        <label for="status">Flight Status</label>
-         <select name="statusSelect" id = "status">
-            <option value="on time" >on time</option>
-            <option value="delayed">delayed</option>
-         </select>
-        <input type="submit" value="Update">
-        <a href="/flightManage" class="back special">Back</a>
-    </form>
+  <form
+    class="update_flight"
+    action="/updateFlight/{{flight['flight_num']}}#"
+    method="POST"
+  >
+    <label for="status">Flight Status</label>
+    <select name="statusSelect" id="status">
+      <option value="on time">on time</option>
+      <option value="delayed">delayed</option>
+    </select>
+    <input type="submit" value="Update" />
+    <a href="/flightManage" class="back special">Back</a>
+  </form>
 
-    <script>
-        {% if flight['flight_status'] == "on time" %}
-        document.querySelector('#status').value = 'on time';
-        {% else %}
-        document.querySelector('#status').value = 'delayed';
-        {% endif %}
-    </script>
-{% endif %}
-
-{% if noFound %}
-<p class="noFound"><strong>Error:</strong> {{noFound}}</p>
-<a href='/flightManage'>Go back to Flight Management</a>
-{% endif %}
+  <script>
+    {% if flight['flight_status'] == "on time" %}
+    document.querySelector('#status').value = 'on time';
+    {% else %}
+    document.querySelector('#status').value = 'delayed';
+    {% endif %}
+  </script>
+  {% endif %} {% if noFound %}
+  <p class="noFound"><strong>Error:</strong> {{noFound}}</p>
+  <a href="/flightManage">Go back to Flight Management</a>
+  {% endif %}
 </div>
 
 {% endblock %}

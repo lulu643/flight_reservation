@@ -1,44 +1,33 @@
-{% extends 'layout.html' %}
+{% extends 'layout.html' %} {% block body %}
 
-{% block body %}
+<div class="title">Flight Status</div>
+{% if status %}
+<table>
+  <th>Airline Name</th>
+  <th>Flight Number</th>
+  <th>Departure from</th>
+  <th>Departure Time</th>
+  <th>Arrive at</th>
+  <th>Arrival Time</th>
+  <th>Price</th>
+  <th>Flight Status</th>
 
-    <div class="title">Flight Status</div>
-    {% if status %}
-        <table>
-            <th> Airline Name </th>
-            <th> Flight Number </th>
-            <th> Departure from </th>
-            <th> Departure Time </th>
-            <th> Arrive at </th>
-            <th> Arrival Time </th>
-            <th> Price </th>
-            <th> Flight Status </th>
-
-
-
-        {% for line in status %}
-            <tr>
-                <td>{{line["airline_name"]}}</td>
-                <td>{{line["flight_num"]}}</td>
-                <td>{{line["departure_airport"]}}</td>
-                <td>{{line["departure_time"]}}</td>
-                <td>{{line["arrival_airport"]}}</td>
-                <td>{{line["arrival_time"]}}</td>
-                <td>{{line["price"]}}</td>
-                <td>{{line["status"]}}</td>
-
-
-
-
-
-            </tr>
-        {% endfor %}
-        </table>
-    {% endif %}
-
-    {% if error %}
-        <p class="error"><strong>Error:</strong> {{error}}</p>
-    {% endif %}
-    <a href="/" class="back special">Back</a>
+  {% for line in status %}
+  <tr>
+    <td>{{line["airline_name"]}}</td>
+    <td>{{line["flight_num"]}}</td>
+    <td>{{line["departure_airport"]}}</td>
+    <td>{{line["departure_time"]}}</td>
+    <td>{{line["arrival_airport"]}}</td>
+    <td>{{line["arrival_time"]}}</td>
+    <td>{{line["price"]}}</td>
+    <td>{{line["status"]}}</td>
+  </tr>
+  {% endfor %}
+</table>
+{% endif %} {% if error %}
+<p class="error"><strong>Error:</strong> {{error}}</p>
+{% endif %}
+<a href="/" class="back special">Back</a>
 
 {% endblock %}

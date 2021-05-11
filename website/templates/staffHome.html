@@ -1,10 +1,16 @@
-{% extends 'layout.html' %}
-
-{% block body %}
-<nav class="navbar navbar-light" style="background-color: #e3f2fd;">
+{% extends 'layout.html' %} {% block body %}
+<nav class="navbar navbar-light" style="background-color: #e3f2fd">
   <div class="container-fluid">
     <a class="navbar-brand" href="#">StaffHome</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -16,27 +22,41 @@
           <a class="nav-link active" href="/flightManage">Flights Management</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link active" href="/airSystemManage/airplane">Airplanes Management</a>
-        </li>
-          <li class="nav-item">
-          <a class="nav-link active" href="/airSystemManage/airport">Airports Management</a>
-        </li>
-          <li class="nav-item">
-          <a class="nav-link active" href="/report/topAgent">View Top Booking Agents</a>
-        </li>
-          <li class="nav-item">
-          <a class="nav-link active" href="/report/topCustomer">View Top Customers</a>
-        </li>
-         <li class="nav-item">
-          <a class="nav-link active" href="/report/salesReport/default">View Reports</a>
-        </li>
-         <li class="nav-item">
-          <a class="nav-link active" href="/report/revenueCompare">Revenue Comparison</a>
+          <a class="nav-link active" href="/airSystemManage/airplane"
+            >Airplanes Management</a
+          >
         </li>
         <li class="nav-item">
-          <a class="nav-link active" href="/report/topDestination">Top Destination</a>
+          <a class="nav-link active" href="/airSystemManage/airport"
+            >Airports Management</a
+          >
         </li>
-          <li class="nav-item">
+        <li class="nav-item">
+          <a class="nav-link active" href="/report/topAgent"
+            >View Top Booking Agents</a
+          >
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="/report/topCustomer"
+            >View Top Customers</a
+          >
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="/report/salesReport/default"
+            >View Reports</a
+          >
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="/report/revenueCompare"
+            >Revenue Comparison</a
+          >
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="/report/topDestination"
+            >Top Destination</a
+          >
+        </li>
+        <li class="nav-item">
           <a class="nav-link active" href="/logout">Log out</a>
         </li>
       </ul>
@@ -44,17 +64,12 @@
   </div>
 </nav>
 
-
 {% if not error %}
 
-    <div class="content">
-        <div class="title">Welcome, {{username}}.</div>
-    </div>
-{% endif %}
-
-{% if error %}
-    <p class="error"><strong>Error:</strong> {{error}}</p>
-    <a href="/login">Go back to Login</a>
-{% endif %}
-
-{% endblock %}
+<div class="content">
+  <div class="title">Welcome, {{username}}.</div>
+</div>
+{% endif %} {% if error %}
+<p class="error"><strong>Error:</strong> {{error}}</p>
+<a href="/login">Go back to Login</a>
+{% endif %} {% endblock %}

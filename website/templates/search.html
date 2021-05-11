@@ -1,68 +1,59 @@
-{% extends 'layout.html' %}
+{% extends 'layout.html' %} {% block body %}
+<div class="title">Flight Results</div>
+{% if flights %} {% if returnFlights %}
+<h2 style="margin-left: 20px">Departure Flights</h2>
+{% endif %}
+<table>
+  <th>Airline Name</th>
+  <th>Flight Number</th>
+  <th>Departure Time</th>
+  <th>Arrival Time</th>
+  <th>Base Price</th>
+  <th>Flight Status</th>
+  <th>Departure from</th>
+  <th>Arrive at</th>
 
+  {% for line in flights %}
+  <tr>
+    <td>{{line["airline_name"]}}</td>
+    <td>{{line["flight_num"]}}</td>
+    <td>{{line["departure_time"]}}</td>
+    <td>{{line["arrival_time"]}}</td>
+    <td>{{line["price"]}}</td>
+    <td>{{line["status"]}}</td>
+    <td>{{line["departure_airport"]}}</td>
+    <td>{{line["arrival_airport"]}}</td>
+  </tr>
+  {% endfor %}
+</table>
+{% endif %} {% if returnFlights %}
+<h2 style="margin-left: 20px">Return Flights</h2>
+<table>
+  <th>Airline Name</th>
+  <th>Flight Number</th>
+  <th>Departure Time</th>
+  <th>Arrival Time</th>
+  <th>Base Price</th>
+  <th>Flight Status</th>
+  <th>Departure from</th>
+  <th>Arrive at</th>
+  {% for line in returnFlights %}
+  <tr>
+    <td>{{line["airline_name"]}}</td>
+    <td>{{line["flight_num"]}}</td>
+    <td>{{line["departure_time"]}}</td>
+    <td>{{line["arrival_time"]}}</td>
+    <td>{{line["price"]}}</td>
+    <td>{{line["status"]}}</td>
+    <td>{{line["departure_airport"]}}</td>
+    <td>{{line["arrival_airport"]}}</td>
+  </tr>
+  {% endfor %}
+</table>
+{% endif %} {% if error %}
+<p class="error"><strong>Error:</strong> {{error}}</p>
+{% endif %}
 
-{% block body %}
-    <div class = "title">Flight Results</div>
-    {% if flights %}
-        {% if returnFlights %}
-        <h2 style="margin-left: 20px;">Departure Flights</h2>
-        {% endif %}
-        <table>
-            <th> Airline Name </th>
-            <th> Flight Number </th>
-            <th> Departure Time </th>
-            <th> Arrival Time </th>
-            <th> Base Price </th>
-            <th> Flight Status </th>
-            <th> Departure from </th>
-            <th> Arrive at </th>
-
-        {% for line in flights %}
-            <tr>
-                <td>{{line["airline_name"]}}</td>
-                <td>{{line["flight_num"]}}</td>
-                <td>{{line["departure_time"]}}</td>
-                <td>{{line["arrival_time"]}}</td>
-                <td>{{line["price"]}}</td>
-                <td>{{line["status"]}}</td>
-                <td>{{line["departure_airport"]}}</td>
-                <td>{{line["arrival_airport"]}}</td>
-
-            </tr>
-        {% endfor %}
-        </table>
-        {% endif %}
-
-        {% if returnFlights %}
-        <h2 style="margin-left: 20px;">Return Flights</h2>
-        <table>
-            <th> Airline Name </th>
-            <th> Flight Number </th>
-            <th> Departure Time </th>
-            <th> Arrival Time </th>
-            <th> Base Price </th>
-            <th> Flight Status </th>
-            <th> Departure from </th>
-            <th> Arrive at </th>
-        {% for line in returnFlights %}
-            <tr>
-                <td>{{line["airline_name"]}}</td>
-                <td>{{line["flight_num"]}}</td>
-                <td>{{line["departure_time"]}}</td>
-                <td>{{line["arrival_time"]}}</td>
-                <td>{{line["price"]}}</td>
-                <td>{{line["status"]}}</td>
-                <td>{{line["departure_airport"]}}</td>
-                <td>{{line["arrival_airport"]}}</td>
-            </tr>
-        {% endfor %}
-        </table>
-    {% endif %}
-
-    {% if error %}
-        <p class="error"><strong>Error:</strong> {{error}}</p>
-    {% endif %}
-
-    <a href="/" class="back special" >Back</a>
+<a href="/" class="back special">Back</a>
 
 {% endblock %}

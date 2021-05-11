@@ -1,11 +1,17 @@
-{% extends 'layout.html' %}
+{% extends 'layout.html' %} {% block body %}
 
-{% block body %}
-
-<nav class="navbar navbar-light" style="background-color: #e3f2fd;">
+<nav class="navbar navbar-light" style="background-color: #e3f2fd">
   <div class="container-fluid">
     <a class="navbar-brand" href="#">StaffHome</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -17,27 +23,41 @@
           <a class="nav-link active" href="/flightManage">Flights Management</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link active" href="/airSystemManage/airplane">Airplanes Management</a>
-        </li>
-          <li class="nav-item">
-          <a class="nav-link active" href="/airSystemManage/airport">Airports Management</a>
-        </li>
-          <li class="nav-item">
-          <a class="nav-link active" href="/report/topAgent">View Top Booking Agents</a>
-        </li>
-          <li class="nav-item">
-          <a class="nav-link active" href="/report/topCustomer">View Top Customers</a>
-        </li>
-         <li class="nav-item">
-          <a class="nav-link active" href="/report/salesReport/default">View Reports</a>
-        </li>
-         <li class="nav-item">
-          <a class="nav-link active" href="/report/revenueCompare">Revenue Comparison</a>
+          <a class="nav-link active" href="/airSystemManage/airplane"
+            >Airplanes Management</a
+          >
         </li>
         <li class="nav-item">
-          <a class="nav-link active" href="/report/topDestination">Top Destination</a>
+          <a class="nav-link active" href="/airSystemManage/airport"
+            >Airports Management</a
+          >
         </li>
-          <li class="nav-item">
+        <li class="nav-item">
+          <a class="nav-link active" href="/report/topAgent"
+            >View Top Booking Agents</a
+          >
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="/report/topCustomer"
+            >View Top Customers</a
+          >
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="/report/salesReport/default"
+            >View Reports</a
+          >
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="/report/revenueCompare"
+            >Revenue Comparison</a
+          >
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="/report/topDestination"
+            >Top Destination</a
+          >
+        </li>
+        <li class="nav-item">
           <a class="nav-link active" href="/logout">Log out</a>
         </li>
       </ul>
@@ -46,83 +66,83 @@
 </nav>
 
 <div class="content">
-<!-- airplane management -->
-{% if state_plane %}
-{% if airplane %}
-    <div class = "airplane">
-        <div class="title staff"> Airplanes Operated By {{session["airline_name"]}} </div>
-        <table id = "plane_prev">
-                <th> Airplane ID </th>
-                <th> Number of Seats </th>
-            {% for line in airplane %}
-            <tr>
-                <td class="plane_prev">{{line["airplane_id"]}}</td>
-                <td class="plane_prev">{{line['seats']}}</td>
-            </tr>
-            {% endfor %}
-        </table>
+  <!-- airplane management -->
+  {% if state_plane %} {% if airplane %}
+  <div class="airplane">
+    <div class="title staff">
+      Airplanes Operated By {{session["airline_name"]}}
     </div>
-{% endif %}
-    <div class = "airplane">
-        <form class="update_plane" action="/airSystemManage/airplane" method="POST">
-            <label for="airplane_id">Airplane ID</label>
-            <input name="airplane_id" type="text" required>
-            <label for="seats">Number of Seats</label>
-            <input name="seats" type="text" required>
-            <input type="submit" value="Add">
-        </form>
-    </div>
-{% endif %}
-
-<!-- airport management  -->
-{% if state_airport %}
-{% if airport %}
-<div class = "airport">
-    <div class="title staff"> Airports in the System: </div>
-    <table id = "airport_prev">
-            <th> Airport Name </th>
-            <th> City name </th>
-        {% for line in airport %}
-        <tr>
-            <td class="airport_prev">{{line['airport_name']}}</td>
-            <td class="airport_prev">{{line['airport_city']}}</td>
-        </tr>
-        {% endfor %}
+    <table id="plane_prev">
+      <th>Airplane ID</th>
+      <th>Number of Seats</th>
+      {% for line in airplane %}
+      <tr>
+        <td class="plane_prev">{{line["airplane_id"]}}</td>
+        <td class="plane_prev">{{line['seats']}}</td>
+      </tr>
+      {% endfor %}
     </table>
-</div>
-{% endif %}
-<div class = "airport">
-    <form class="update_airport" action="/airSystemManage/airport" method="POST">
-        <label for="name">Airport Name</label>
-        <input name="name" type="text" required>
-        <label for="city">City Name</label>
-        <input name="city" type="text" required>
-        <input type="submit" value="Add">
+  </div>
+  {% endif %}
+  <div class="airplane">
+    <form class="update_plane" action="/airSystemManage/airplane" method="POST">
+      <label for="airplane_id">Airplane ID</label>
+      <input name="airplane_id" type="text" required />
+      <label for="seats">Number of Seats</label>
+      <input name="seats" type="text" required />
+      <input type="submit" value="Add" />
     </form>
-</div>
-{% endif %}
+  </div>
+  {% endif %}
 
-
-{% if noFound %}
-<p class="noFound"> {{noFound}}</p>
-{% if message == "airplane" %}
-<a href='/airSystemManage/airplane'>Go back to airplane Management</a>
-{% else %}
-<a href='/airSystemManage/airport'>Go back to airport Management</a>
-{% endif %}
-{% endif %}
+  <!-- airport management  -->
+  {% if state_airport %} {% if airport %}
+  <div class="airport">
+    <div class="title staff">Airports in the System:</div>
+    <table id="airport_prev">
+      <th>Airport Name</th>
+      <th>City name</th>
+      {% for line in airport %}
+      <tr>
+        <td class="airport_prev">{{line['airport_name']}}</td>
+        <td class="airport_prev">{{line['airport_city']}}</td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+  {% endif %}
+  <div class="airport">
+    <form
+      class="update_airport"
+      action="/airSystemManage/airport"
+      method="POST"
+    >
+      <label for="name">Airport Name</label>
+      <input name="name" type="text" required />
+      <label for="city">City Name</label>
+      <input name="city" type="text" required />
+      <input type="submit" value="Add" />
+    </form>
+  </div>
+  {% endif %} {% if noFound %}
+  <p class="noFound">{{noFound}}</p>
+  {% if message == "airplane" %}
+  <a href="/airSystemManage/airplane">Go back to airplane Management</a>
+  {% else %}
+  <a href="/airSystemManage/airport">Go back to airport Management</a>
+  {% endif %} {% endif %}
 </div>
 
 <script>
-        {% if session["airplane_updated"] == True %}
-        alert("Airplane Successfully Added!");
-        {% set session = session.update({"airplane_updated":False}) %}
-        {% endif %}
+  {% if session["airplane_updated"] == True %}
+  alert("Airplane Successfully Added!");
+  {% set session = session.update({"airplane_updated":False}) %}
+  {% endif %}
 
-        {% if session["airport_updated"] == True %}
-        alert("Airport Successfully Added!");
-        {% set session = session.update({"airport_updated":False}) %}
-        {% endif %}
+  {% if session["airport_updated"] == True %}
+  alert("Airport Successfully Added!");
+  {% set session = session.update({"airport_updated":False}) %}
+  {% endif %}
 </script>
 
 <script src="{{ url_for('static',filename='js/script.js')}}"></script>
