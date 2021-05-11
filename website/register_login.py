@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, session, url_for, redirect
+from flask import Blueprint, render_template, request, session, url_for, redirect, flash
 from .DB_connector import conn
 from passlib.hash import sha256_crypt
 

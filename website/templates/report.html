@@ -23,9 +23,6 @@
           <a class="nav-link active" href="/airSystemManage/airport">Airports Management</a>
         </li>
           <li class="nav-item">
-          <a class="nav-link active" href="/flightManage">View Ratings</a>
-        </li>
-          <li class="nav-item">
           <a class="nav-link active" href="/report/topAgent">View Top Booking Agents</a>
         </li>
           <li class="nav-item">
@@ -50,34 +47,8 @@
 
 
 <div class="content">
-    <!-- view ratings -->
-    <div class = "view_ratings">
-        {% if ratings %}
-        <div class="title staff"> Ratings for the Flight: </div>
-        <h4> Airline Name: {{session["airline_name"]}} </h4>
-        <h4> Flight Number: {{ratings[0]["flight_num"]}} </h4>
-        <h4> Departure Time: {{ratings[0]["dept_time"]}} </h4>
-        <h4> Average Rate: {{avg_rate}} </h4> </br>
 
-        <h4> Ratings & Comments: </h4>
-
-        <table id = "rate_list">
-                <th> Customer's Email </th>
-                <th> Rate </th>
-                <th> Comments </th>
-
-            {% for line in ratings %}
-            <tr>
-                <td class="rate_list">{{line['cust_email']}}</td>
-                <td class="rate_list">{{line['rate']}}</td>
-                <td class="rate_list">{{line['comments']}}</td>
-            </tr>
-            {% endfor %}
-        </table>
-        {% endif %}
-    </div>
-
-    <!-- top booking agents    -->
+    <!-- top 5 booking agents    -->
     <div class = "top_booking_agents">
         {% if by_sales or by_commission %}
         <form action = "/report/topAgent" method = "POST">
@@ -89,15 +60,16 @@
             </select>
                 <input type="submit" value="View">
         </form>
+
              <div class="title staff"> {{title}}: </div>
             {% if by_sales %}
             <table id = "agent_list">
-                    <th> Agent's Email </th>
+                    <th> Agent ID </th>
                     <th> Total Sales </th>
 
                 {% for line in by_sales %}
                 <tr>
-                    <td class="agent_list">{{line['agent_email']}}</td>
+                    <td class="agent_list">{{line['booking_agent_id']}}</td>
                     <td class="agent_list">{{line['total_sales']}}</td>
                 </tr>
                 {% endfor %}
@@ -106,12 +78,12 @@
 
             {% if by_commission %}
             <table id = "agent_list2">
-                    <th> Agent's Email </th>
+                    <th> Agent ID </th>
                     <th> Total Commission </th>
 
                 {% for line in by_commission %}
                 <tr>
-                    <td class="agent_list2">{{line['agent_email']}}</td>
+                    <td class="agent_list2">{{line['booking_agent_id']}}</td>
                     <td class="agent_list2">{{line['commission']}}</td>
                 </tr>
                 {% endfor %}
@@ -124,16 +96,16 @@
     <div class = "frequent_customers">
         {% if passenger %}
         <div class="title staff">  Most Frequent Passenger </div>
-        <table id = "flight_list ">
-                <th> Passenger's Email </th>
+        <table id = "flight_list1">
+                <th> Customer Email </th>
                 <th> Travel Times </th>
-                <th> Actions </th>
+                <th> Action </th>
             {% for line in passenger %}
             <tr>
-                <td class="flight_list ">{{line['cust_email']}}</td>
+                <td class="flight_list ">{{line['customer_email']}}</td>
                 <td class="flight_list ">{{line['travel_times']}}</td>
                 <td>
-                    <a href = "/report/topCustomer/{{line['cust_email']}}"> Flights History</a>
+                    <a href = "/report/topCustomer/{{line['customer_email']}}"> Flights History</a>
                 </td>
             </tr>
             {% endfor %}
@@ -144,7 +116,7 @@
     <!-- customer's flights -->
     <div class = "flight_history">
         {% if people_flight %}
-        <h4> The Flights Taken by Customer {{people_flight[0]["cust_email"]}} with {{session["airline_name"]}} </h4>
+        <h4> The Flights Taken by Customer {{people_flight[0]["customer_email"]}} with {{session["airline_name"]}} </h4>
 
         <table id = "flight_list ">
                 <th> Airline Name </th>
@@ -156,14 +128,17 @@
             <tr>
                 <td class="flight_list ">{{line['airline_name']}}</td>
                 <td class="flight_list ">{{line['flight_num']}}</td>
-                <td class="flight_list ">{{line["dept_time"]}}</td>
-                <td class="flight_list ">{{line["purchase_time"]}}</td>
-                <td class="flight_list ">{{line["sold_price"]}}</td>
+                <td class="flight_list ">{{line["departure_time"]}}</td>
+                <td class="flight_list ">{{line["purchase_date"]}}</td>
+                <td class="flight_list ">{{line["price"]}}</td>
             </tr>
             {% endfor %}
         </table>
         {% endif %}
     </div>
+
+
+
     <!-- sales report -->
     <div class = "sales_report">
         {% if sales %}
@@ -270,6 +245,7 @@
     </div>
     {% endif %}
 
+
     <!-- top destinations -->
     <div class = "top_destinations">
     {% if destinations %}
@@ -283,14 +259,14 @@
         </form>
         <div class="title staff">  {{title}}: </div>
         <table id = "place_list">
-                <th> Airport's Code </th>
-                <th> City Name </th>
+                <th> Airport </th>
+                <th> City</th>
                 <th> Visit Times</th>
 
             {% for line in destinations %}
             <tr>
-                <td class="place_list">{{line['arr_at']}}</td>
-                <td class="place_list">{{line['city']}}</td>
+                <td class="place_list">{{line['arrival_airport']}}</td>
+                <td class="place_list">{{line['airport_city']}}</td>
                 <td class="place_list">{{line['visit_time']}}</td>
             </tr>
             {% endfor %}
@@ -299,13 +275,12 @@
     </div>
 </div>
 
+
 <div class = "noFound">
 {% if noFound %}
 <p class="noFound"><strong>Error:</strong> {{noFound}}</p> </br>
 <a href='/staffHome'>Go back to StaffHome</a>
 {% endif %}
 </div>
-      
-        
-    <script src="{{ url_for('static',filename='js/script.js')}}"></script>
+
 {% endblock %}

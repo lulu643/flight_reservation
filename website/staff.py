@@ -173,29 +173,6 @@ def updateFlight(flight_num):
             return render_template('flightManage.html', noFound=noFound)
 
 
-@staff.route('/viewPassengers/<string:flight_num>/<string:dept_time>')
-@staff_login_required
-def viewPassenger(flight_num, dept_time):
-    # get airline name
-    airline_name = session['airline_name']
-    print(flight_num, dept_time)
-    cursor = conn.cursor()
-    # check if such flight exits
-    query = "SELECT flight_num, dept_time, email, name, purchase_date FROM ticket \
-        JOIN customer ON ticket.cust_email = customer.email WHERE (airline_name, flight_num, dept_time) = (%s, %s, %s)"
-    cursor.execute(query, (airline_name, flight_num, dept_time))
-    data = cursor.fetchall()
-    cursor.close()
-    print("data: 1", data)
-    if data:
-        for each in data:
-            print("data:", each)
-        return render_template("viewPassengers.html", passenger=data)
-    else:
-        noFound = "This flight has no passengers yet"
-        return render_template('viewPassengers.html', noFound=noFound)
-
-
 @staff.route('/airSystemManage/airplane', methods=['GET', 'POST'])
 @staff_login_required
 def managePlane():
@@ -285,42 +262,6 @@ def manageAirport():
             return render_template("airSystemManage.html", noFound=noFound, state_airport=True)
 
 
-@staff.route('/report/viewRatings/<string:flight_num>/<string:dept_time>')
-@staff_login_required
-def checkRatings(flight_num, dept_time):
-    # get airline name
-    airline_name = session['airline_name']
-
-    # fetch data
-    cursor = conn.cursor()
-    query = "SELECT airline_name,flight_num, dept_time, AVG(rate) as avg_rate \
-        FROM rates \
-        WHERE (airline_name,flight_num, dept_time) = (%s, %s, %s)"
-    cursor.execute(query, (airline_name, flight_num, dept_time))
-    data1 = cursor.fetchone()
-    if data1["avg_rate"]:
-        avg_rate = "{0:.2f}".format(float(data1["avg_rate"]))
-    else:
-        noFound = "This Flight has no ratings yet"
-        return render_template("report.html", noFound=noFound)
-
-    query = "SELECT airline_name,flight_num, dept_time, cust_email, rate, comments \
-            FROM rates \
-            WHERE (airline_name,flight_num, dept_time) = (%s, %s, %s) "
-    cursor.execute(query, (airline_name, flight_num, dept_time))
-    data = cursor.fetchall()
-    cursor.close()
-    conn.commit()
-
-    if data:
-        for each in data:
-            print(each)
-        return render_template("report.html", avg_rate=avg_rate, ratings=data)
-    else:
-        noFound = "This Flight has no ratings yet"
-        return render_template("report.html", noFound=noFound)
-
-
 @staff.route('/report/topAgent', methods=['GET', 'POST'])
 @staff_login_required
 def viewTopAgent():
@@ -376,7 +317,7 @@ def viewTopAgent():
                 return render_template("report.html", title=title, by_commission=data)
             else:
                 noFound = "There is an issue in displaying the information you want"
-                return render_template("report.html", noFound=noFound)
+                return render_template("report.html", title=title, noFound=noFound)
 
     else:
         title = "Default: Top 5 booking agents by ticket sales for the past month"
@@ -390,9 +331,9 @@ def viewTopAgent():
         if data:
             for each in data:
                 print(each)
-            return render_template("report.html", title=title, by_sales=data)
+            return render_template("report.html", by_sales=data)
         else:
-            noFound = "There is an issue in displaying the information you want"
+            noFound = "There is an issue in displaying the information you want."
             return render_template("report.html", noFound=noFound)
 
 
@@ -587,13 +528,11 @@ def viewReport(message):
 @staff.route('/report/revenueCompare', methods=['GET', 'POST'])
 @staff_login_required
 def revenueCompare():
-    # get airline name
-    airline_name = session['airline_name']
 
     cursor = conn.cursor()
 
     # colors:
-    colors = ["#FDB45C", "#FEDCBA"]
+    colors = ["#FFB6C1", "#EE82EE"]
     if request.method == "POST":
         default = ""
         option = request.form.get("revSelect")
@@ -642,8 +581,6 @@ def revenueCompare():
 @staff.route('/report/topDestination', methods=['GET', 'POST'])
 @staff_login_required
 def topDestination():
-    # get airline name
-    airline_name = session['airline_name']
 
     # different query
     if request.method == "POST":
@@ -661,10 +598,10 @@ def topDestination():
                     WHERE S.arrival_airport  = airport.airport_name AND DATE(purchase_date) BETWEEN NOW() - INTERVAL 1 YEAR and NOW()\
                     GROUP BY arrival_airport ORDER BY visit_time DESC LIMIT 3"
     else:
-        title = "Default: Top Three Destinations for the Past Three Months"
+        title = "Default: Top Three Destinations for the Past Year"
         query = "SELECT arrival_airport, airport_city, count(*) as visit_time \
                 FROM purchases NATURAL JOIN ticket NATURAL JOIN flight as S, airport \
-                WHERE S.arrival_airport  = airport.airport_name AND DATE(purchase_date) BETWEEN NOW() - INTERVAL 3 MONTH and NOW() \
+                WHERE S.arrival_airport  = airport.airport_name AND DATE(purchase_date) BETWEEN NOW() - INTERVAL 1 YEAR and NOW() \
                 GROUP BY arrival_airport ORDER BY visit_time DESC LIMIT 3"
     # execute the query
     cursor = conn.cursor()

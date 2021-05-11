@@ -2,9 +2,9 @@
 
 {% block body %}
 
-    {%if role == 'agent' %}
+{%if role == 'agent' %}
 
-    <nav class="navbar navbar-light" style="background-color: #e3f2fd;">
+<nav class="navbar navbar-light" style="background-color: #e3f2fd;">
   <div class="container-fluid">
     <a class="navbar-brand" href="#">AgentHome</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -13,25 +13,25 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link" href="/agentHome">Home</a>
+          <a class="nav-link active" href="/agentHome">Home</a>
         </li>
-          <li class="nav-item">
+        <li class="nav-item">
+          <a class="nav-link active" href="/viewMyFlights">view flights</a>
+        </li>
+        <li class="nav-item">
           <a class="nav-link active" href='/purchaseTickets'>Purchase Tickets</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/viewMyFlights">view flights</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/searchForFlights">Searching Flights</a>
+          <a class="nav-link active" href="/searchForFlights">Searching Flights</a>
         </li>
           <li class="nav-item">
-          <a class="nav-link" href="/commission">View My Comission</a>
+          <a class="nav-link active" href="/commission">View My Comission</a>
         </li>
           <li class="nav-item">
-          <a class="nav-link" href="/topCustomers">Top Customers</a>
+          <a class="nav-link active" href="/topCustomers">Top Customers</a>
         </li>
           <li class="nav-item">
-          <a class="nav-link" href="/logout">Log out</a>
+          <a class="nav-link active" href="/logout">Log out</a>
         </li>
       </ul>
     </div>
@@ -39,34 +39,35 @@
 </nav>
 
 
-    {% else %}
+{% else %}
 
     <nav class="navbar navbar-light" style="background-color: #e3f2fd;">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="#">CustomerHome</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent2">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link" href="/customerHome">Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/viewMyFlights">View My Flights</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/searchForFlights">Search for Flights</a>
-        </li>
-          <li class="nav-item">
-          <a class="nav-link" href="/trackMySpending" >Track My Spending</a>
-        </li>
-          <a class="nav-link" href="/logout">Log out</a>
-        </li>
-      </ul>
-    </div>
-  </div>
-</nav>
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">CustomerHome</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link" href="/customerHome">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/viewMyFlights">View My Flights</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/searchForFlights">Search for Flights</a>
+            </li>
+              <li class="nav-item">
+              <a class="nav-link" href="/trackMySpending" >Track My Spending</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/logout">Log out</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
 
 
     {% endif %}

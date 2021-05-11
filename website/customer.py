@@ -40,8 +40,10 @@ def logout():
 @customer.route('/viewMyFlights')
 @customer_or_agent_login_required
 def viewMyFlights():
+    cursor = conn.cursor()
 
     if session['role'] == 'customer':
+
 
         email = session['email']
 
@@ -63,8 +65,6 @@ def viewMyFlights():
 
         cursor.close()
 
-        return render_template('viewMyFlights.html', flights=data1, role='customer')
-
     elif session['role'] == 'agent':
 
         email = session['email']
@@ -73,17 +73,20 @@ def viewMyFlights():
 
         current_date = datetime.datetime.now()
 
-        query = "select * from ticket natural join purchases join flight  where customer_email = %s and departure_time > %s"
+        query = "select * from ticket natural join purchases natural join flight  join booking_agent  where booking_agent.email =  %s and flight.departure_time > %s"
 
         cursor.execute(query, (email, current_date))
 
         data1 = cursor.fetchall()
 
+        print(data1)
+
         conn.commit()
 
         cursor.close()
 
-        return render_template('viewMyFlights.html', flights=data1, role='agent')
+    return render_template('viewMyFlights.html', flights=data1, role='agent')
+
 
 
 @customer.route('/searchForFlights')

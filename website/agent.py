@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, session
+from flask import Blueprint, render_template, request, session, flash
 from .DB_connector import conn
 from .login_required import agent_login_required
 import datetime

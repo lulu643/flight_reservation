@@ -24,9 +24,6 @@
           <a class="nav-link active" href="/airSystemManage/airport">Airports Management</a>
         </li>
           <li class="nav-item">
-          <a class="nav-link active" href="/flightManage">View Ratings</a>
-        </li>
-          <li class="nav-item">
           <a class="nav-link active" href="/report/topAgent">View Top Booking Agents</a>
         </li>
           <li class="nav-item">
@@ -96,8 +93,6 @@
                 <th> Arrive at </th>
                 <th> Airplane ID </th>
                 <th> Actions </th>
-                <th> Passengers </th>
-                <th> Ratings </th>
             {% for line in flights %}
                 <tr>
                     <td>{{line['airline_name']}}</td>
@@ -111,12 +106,6 @@
                     <td>{{line['airplane_id']}}</td>
                     <td>
                         <a href = "/updateFlight/{{line['flight_num']}}#"> Update Flight </a>
-                    </td>
-                    <td>
-                        <a href = "/viewPassengers/{{line['flight_num']}}"> View Passengers </a>
-                    </td>
-                    <td>
-                        <a href = "/report/viewRatings/{{line['flight_num']}}"> View Ratings </a>
                     </td>
                 </tr>
             {% endfor %}
@@ -181,5 +170,4 @@
         {% endif %}
     </script>
 
-    <script src="{{ url_for('static',filename='js/script.js')}}"></script>
 {% endblock %}

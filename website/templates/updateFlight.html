@@ -1,6 +1,5 @@
 {% extends 'layout.html' %}
 
-
 {% block body %}
 
 <nav class="navbar navbar-light" style="background-color: #e3f2fd;">
@@ -24,9 +23,6 @@
           <a class="nav-link active" href="/airSystemManage/airport">Airports Management</a>
         </li>
           <li class="nav-item">
-          <a class="nav-link active" href="/flightManage">View Ratings</a>
-        </li>
-          <li class="nav-item">
           <a class="nav-link active" href="/report/topAgent">View Top Booking Agents</a>
         </li>
           <li class="nav-item">
@@ -48,7 +44,6 @@
     </div>
   </div>
 </nav>
-
 
 
 
@@ -78,9 +73,9 @@
         </tr>
     </table>
 
-    <form class="update_flight" action="/updateFlight/{{flight['flight_num']}}/{{flight['dept_time']}}" method="POST">
+    <form class="update_flight" action="/updateFlight/{{flight['flight_num']}}#" method="POST">
         <label for="status">Flight Status</label>
-         <select name="statusSelect" id = "statusSelect">
+         <select name="statusSelect" id = "status">
             <option value="on time" >on time</option>
             <option value="delayed">delayed</option>
          </select>
@@ -90,9 +85,9 @@
 
     <script>
         {% if flight['flight_status'] == "on time" %}
-        document.querySelector('#statusSelect').value = 'on time';
+        document.querySelector('#status').value = 'on time';
         {% else %}
-        document.querySelector('#statusSelect').value = 'delayed';
+        document.querySelector('#status').value = 'delayed';
         {% endif %}
     </script>
 {% endif %}
@@ -103,5 +98,4 @@
 {% endif %}
 </div>
 
-<script src="{{ url_for('static',filename='js/script.js')}}"></script>
 {% endblock %}
