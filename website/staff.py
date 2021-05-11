@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, session, url_for, redirect, flash
-from .database import conn
+from .DB_connector import conn
 from datetime import datetime
 from .login_required import staff_login_required
 
@@ -9,50 +9,50 @@ staff = Blueprint('staff', __name__)
 @staff.route('/staffHome')
 @staff_login_required
 def staffHome():
-        
-    #fetch data from session
+    # fetch data from session
     username = session["username"]
     cursor = conn.cursor()
     query = 'SELECT first_name, last_name, airline_name FROM airline_staff WHERE username = %s'
     cursor.execute(query, (username))
     data = cursor.fetchone() 
     cursor.close()
-    #debugging
+    # debugging
     print(data["first_name"], data["last_name"], data["airline_name"])
     cursor.close()
-    return render_template("staffHome.html",username = username, info = data)
+    return render_template("staffHome.html", username=username, info=data)
 
-@staff.route('/flightManage', methods = ['GET', 'POST'])
+
+@staff.route('/flightManage', methods=['GET', 'POST'])
 @staff_login_required
 def viewFlight():
 
-    #get airline name
+    # get airline name
     airline_name = session['airline_name']
     default = ""
     if request.method == "POST": 
-        #grabs information from the forms
+        # grabs information from the forms
         dept_from = request.form['dept_from']
-        arr_at = request.form['arr_at']
+        arrival_airport = request.form['arrival_airport']
         start_date = request.form['start_date']
         end_date = request.form['end_date']
         if datetime.strptime(start_date, "%Y-%m-%d") > datetime.strptime(end_date, "%Y-%m-%d"):
-            return render_template("flightManage.html", error = "The dates you entered are invalid.")
+            return render_template("flightManage.html", error="The dates you entered are invalid.")
 
-        #database query
+        # database query
         cursor = conn.cursor()
         query = "SELECT * FROM flight NATURAL JOIN airplane, airport as A, airport as B \
-        where airline_name = %s AND date(dept_time) >= %s AND date(dept_time) <= %s \
-        AND flight.dept_from = A.name and flight.arr_at = B.name and (A.name = %s or A.city = %s) \
-            and (B.name = %s or B.city = %s)"
-        cursor.execute(query, (airline_name, start_date, end_date, dept_from, dept_from, arr_at, arr_at))
+        where airline_name = %s AND date(departure_time) >= %s AND date(departure_time) <= %s \
+        AND flight.departure_airport = A.airport_name and flight.arrival_airport = B.airport_name and (A.airport_name = %s or A.airport_city = %s) \
+            and (B.airport_name = %s or B.airport_city = %s)"
+        cursor.execute(query, (airline_name, start_date, end_date, dept_from, dept_from, arrival_airport, arrival_airport))
         data1 = cursor.fetchall() 
         cursor.close()
-        msg = (dept_from, arr_at, start_date, end_date)
+        msg = (dept_from, arrival_airport, start_date, end_date)
 
     else: 
         # default views 
         cursor = conn.cursor()
-        query = 'SELECT * FROM flight WHERE airline_name = %s AND DATE(dept_time) BETWEEN DATE(CURRENT_TIMESTAMP) \
+        query = 'SELECT * FROM flight WHERE airline_name = %s AND DATE(departure_time) BETWEEN DATE(CURRENT_TIMESTAMP) \
         AND DATE(CURRENT_TIMESTAMP) + INTERVAL 30 DAY'
         cursor.execute(query, (airline_name))
         data1 = cursor.fetchall() 
@@ -66,30 +66,30 @@ def viewFlight():
             print("Received Data:/n", each['airline_name'],each['flight_num'],each['dept_time'])
             return render_template('flightManage.html', flights=data1, msg = msg)
     else: 
-        #returns an error message to the html page
+        # returns an error message to the html page
         noFound = "No flights available within the given conditions"
         return render_template('flightManage.html', default = default, noFound = noFound)
 
 
-@staff.route('/addFlight', methods = ['GET', 'POST'])
+@staff.route('/addFlight', methods=['GET', 'POST'])
 @staff_login_required
 def add_flight():
-    #get airline name
+    # get airline name
     airline_name = session['airline_name']
 
     if request.method == "POST":
-        #grabs information from the forms
+        # grabs information from the forms
         flight_num = request.form['flight_num1']
         dept_time = request.form['dept_time1']
         arr_time = request.form['arr_time1']
         base_price = float(request.form['base_price1'])
         flight_status = "on time"
         dept_from = request.form['dept_from1']
-        arr_at = request.form['arr_at1']
+        arrival_airport = request.form['arrival_airport1']
         airplane_id = request.form['airplane_id1']
         print(dept_time)
         if datetime.strptime(dept_time, "%Y-%m-%dT%H:%M:%S") > datetime.strptime(arr_time, "%Y-%m-%dT%H:%M:%S"):
-            return render_template("flightManage.html", error = "The dates you entered are invalid.")
+            return render_template("flightManage.html", error="The dates you entered are invalid.")
 
         cursor = conn.cursor()
         
@@ -100,23 +100,26 @@ def add_flight():
         data = cursor.fetchall()
         airplane_list = []
         for line in data:
-            airplane_list.append(line["airplane_id"])
-        if airplane_id not in airplane_list: 
+            airplane_list.append(str(line["airplane_id"]))
+        # for debugging purpose
+        print(airplane_list)
+        print(type(airplane_list[0]))
+        if airplane_id not in airplane_list:
             noFound = "Airplane ID Not Found"
             return render_template('flightManage.html', noFound = noFound)
         #airport
-        query = "SELECT name FROM airport"
+        query = "SELECT airport_name FROM airport"
         cursor.execute(query)
         data = cursor.fetchall()
         airport_list = []
         for line in data:
-            airport_list.append(line["name"])
-        if dept_from not in airport_list or arr_at not in airport_list:
+            airport_list.append(line["airport_name"])
+        if dept_from not in airport_list or arrival_airport not in airport_list:
             noFound = "Airport Not Found"
             return render_template('flightManage.html', noFound = noFound)
 
 
-        query = "SELECT * FROM flight WHERE (airline_name, flight_num, dept_time) = (%s, %s, %s)"
+        query = "SELECT * FROM flight WHERE (airline_name, flight_num, departure_time) = (%s, %s, %s)"
         cursor.execute(query, (airline_name, flight_num, dept_time))
         data = cursor.fetchall()
         if data: 
@@ -125,8 +128,8 @@ def add_flight():
         
         #update database
         query = "INSERT INTO flight VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
-        cursor.execute(query, (airline_name, flight_num, dept_time, arr_time,\
-            base_price, flight_status, dept_from, arr_at, airplane_id))
+        cursor.execute(query, (airline_name, flight_num, dept_from, dept_time, arrival_airport, arr_time,
+                               base_price, flight_status, airplane_id))
         msg = "Add Flights Success"
         print(msg)
         cursor.close()
@@ -149,7 +152,7 @@ def updateFlight(flight_num, dept_time):
         print("new-status", new_status)
         #update database
         cursor = conn.cursor()
-        query = "UPDATE flight SET flight_status = %s WHERE (airline_name, flight_num, dept_time) = (%s, %s, %s)"
+        query = "UPDATE flight SET status = %s WHERE (airline_name, flight_num, departure_time) = (%s, %s, %s)"
         cursor.execute(query, (new_status, airline_name, flight_num, dept_time))
         cursor.close()
         conn.commit()
@@ -159,16 +162,16 @@ def updateFlight(flight_num, dept_time):
     else: 
         cursor = conn.cursor()
         #check if such flight exits
-        query = "SELECT * FROM flight WHERE airline_name = %s AND flight_num = %s AND dept_time = %s"
+        query = "SELECT * FROM flight WHERE airline_name = %s AND flight_num = %s AND departure_time = %s"
         cursor.execute(query, (airline_name, flight_num, dept_time))
         data = cursor.fetchone()
         cursor.close()
         if data: 
             print(data)
-            return render_template("updateFlight.html", flight = data)
+            return render_template("updateFlight.html", flight=data)
         else: 
             noFound = "There's an issue in updating the flight: such flight does not exist"
-            return render_template('flightManage.html', noFound = noFound)
+            return render_template('flightManage.html', noFound=noFound)
 
 @staff.route('/viewPassengers/<string:flight_num>/<string:dept_time>')
 @staff_login_required
@@ -178,7 +181,7 @@ def viewPassenger(flight_num, dept_time):
     print(flight_num, dept_time)
     cursor = conn.cursor()
     #check if such flight exits
-    query = "SELECT flight_num, dept_time, email, name, purchase_time FROM ticket \
+    query = "SELECT flight_num, dept_time, email, name, purchase_date FROM ticket \
         JOIN customer ON ticket.cust_email = customer.email WHERE (airline_name, flight_num, dept_time) = (%s, %s, %s)"
     cursor.execute(query, (airline_name, flight_num, dept_time))
     data = cursor.fetchall()
@@ -249,7 +252,7 @@ def manageAirport():
 
         #check duplicates
         cursor = conn.cursor()
-        query = "SELECT * FROM airport WHERE name = %s"
+        query = "SELECT * FROM airport WHERE airport_name = %s"
         cursor.execute(query, (name))
         data = cursor.fetchall()
         if data: 
@@ -320,7 +323,7 @@ def checkRatings(flight_num, dept_time):
 @staff.route('/report/topAgent', methods = ['GET', 'POST'])
 @staff_login_required
 def viewTopAgent():
-    #get airline name
+    # get airline name
     airline_name = session['airline_name']
     
     if request.method == 'POST': 
@@ -330,9 +333,9 @@ def viewTopAgent():
         #three options: 
         if option == "by_sales_month": 
             title = "Top 5 booking agents by ticket sales for the past month" 
-            query = "SELECT  agent_email, COUNT(*) AS total_sales FROM ticket \
-            WHERE agent_email IS NOT NULL AND DATE(purchase_time) BETWEEN NOW() - INTERVAL 30 DAY AND NOW()\
-            GROUP BY agent_email ORDER BY total_sales DESC LIMIT 5"
+            query = "SELECT  booking_agent_id, COUNT(*) AS total_sales FROM purchases \
+            WHERE booking_agent_id IS NOT NULL AND DATE(purchase_date) BETWEEN NOW() - INTERVAL 30 DAY AND NOW()\
+            GROUP BY booking_agent_id ORDER BY total_sales DESC LIMIT 5"
             cursor.execute(query)
             data = cursor.fetchall()
             cursor.close()
@@ -345,9 +348,9 @@ def viewTopAgent():
                 return render_template("report.html", noFound = noFound)
         elif option == "by_sales_year":
             title = "Top 5 booking agents by ticket sales for the past year" 
-            query = "SELECT  agent_email, COUNT(*) AS total_sales FROM ticket \
-            WHERE agent_email IS NOT NULL AND DATE(purchase_time) BETWEEN NOW() - INTERVAL 1 YEAR AND NOW()\
-            GROUP BY agent_email ORDER BY total_sales DESC LIMIT 5"
+            query = "SELECT  booking_agent_id, COUNT(*) AS total_sales FROM purchases \
+            WHERE booking_agent_id IS NOT NULL AND DATE(purchase_date) BETWEEN NOW() - INTERVAL 1 YEAR AND NOW()\
+            GROUP BY booking_agent_id ORDER BY total_sales DESC LIMIT 5"
             cursor.execute(query)
             data = cursor.fetchall()
             cursor.close()
@@ -360,9 +363,9 @@ def viewTopAgent():
                 return render_template("report.html", noFound = noFound)
         else:
             title = "Top 5 booking agents by total commission for the past year" 
-            query = "SELECT agent_email, SUM(sold_price) * 0.1 AS commission FROM ticket \
-                     WHERE agent_email IS NOT NULL AND DATE(purchase_time) BETWEEN NOW() - INTERVAL 1 YEAR AND NOW()\
-                     GROUP BY agent_email ORDER BY commission DESC LIMIT 5"
+            query = "SELECT booking_agent_id, SUM(price) * 0.1 AS commission FROM purchases NATURAL JOIN ticket NATURAL JOIN flight\
+                     WHERE booking_agent_id IS NOT NULL AND DATE(purchase_date) BETWEEN NOW() - INTERVAL 1 YEAR AND NOW()\
+                     GROUP BY booking_agent_id ORDER BY commission DESC LIMIT 5"
             cursor.execute(query)
             data = cursor.fetchall()
             cursor.close()
@@ -377,9 +380,9 @@ def viewTopAgent():
     else: 
         title = "Default: Top 5 booking agents by ticket sales for the past month"
         cursor = conn.cursor()
-        query = "SELECT  agent_email, COUNT(*) AS total_sales FROM ticket \
-        WHERE agent_email IS NOT NULL AND DATE(purchase_time) BETWEEN NOW() - INTERVAL 30 DAY AND NOW()\
-        GROUP BY agent_email ORDER BY total_sales DESC LIMIT 5"
+        query = "SELECT  booking_agent_id, COUNT(*) AS total_sales FROM purchases \
+        WHERE booking_agent_id IS NOT NULL AND DATE(purchase_date) BETWEEN NOW() - INTERVAL 30 DAY AND NOW()\
+        GROUP BY booking_agent_id ORDER BY total_sales DESC LIMIT 5"
         cursor.execute(query)
         data = cursor.fetchall()
         cursor.close()
@@ -399,9 +402,9 @@ def viewTopCustomer():
 
     #start to fetch the data
     cursor = conn.cursor()
-    query = "SELECT cust_email, COUNT(*) AS travel_times FROM ticket WHERE airline_name = %s \
-    AND DATE(purchase_time) BETWEEN NOW() - INTERVAL 1 YEAR AND NOW() \
-    GROUP BY cust_email"
+    query = "SELECT customer_email, COUNT(*) AS travel_times FROM purchases NATURAL JOIN ticket \
+    WHERE airline_name = %s AND DATE(purchase_date) BETWEEN NOW() - INTERVAL 1 YEAR AND NOW() \
+    GROUP BY customer_email"
 
     cursor.execute(query,(airline_name))
 
@@ -411,8 +414,8 @@ def viewTopCustomer():
         if each["travel_times"] > max_times:
             max_times = each["travel_times"]
 
-    query2 = "SELECT cust_email, COUNT(*) AS travel_times FROM ticket WHERE airline_name = %s \
-        GROUP BY cust_email HAVING travel_times = %s"
+    query2 = "SELECT customer_email, COUNT(*) AS travel_times FROM purchases NATURAL JOIN ticket\
+     WHERE airline_name = %s GROUP BY customer_email HAVING travel_times = %s"
     cursor.execute(query2,(airline_name, max_times))
     data = cursor.fetchall()
     cursor.close()
@@ -433,7 +436,8 @@ def viewCustomerFlight(email):
 
     #fetch data
     cursor = conn.cursor()
-    query = "SELECT airline_name, flight_num, dept_time, purchase_time, sold_price, cust_email FROM ticket WHERE cust_email = %s"
+    query = "SELECT airline_name, flight_num, departure_time, purchase_date, price, customer_email \
+    FROM ticket NATURAL JOIN purchases NATURAL JOIN flight WHERE customer_email = %s"
     cursor.execute(query,(email))
     data = cursor.fetchall()
     cursor.close()
@@ -455,11 +459,11 @@ def viewReport(message):
         #access total_sales and date range
         cursor = conn.cursor()
         query = "SELECT DATE(NOW()) - INTERVAL 1 MONTH AS curr_prev, DATE(NOW()) AS current,  COUNT(*) AS total_sales \
-            FROM ticket WHERE date(purchase_time) between DATE(NOW()) - INTERVAL 1 MONTH AND DATE(NOW()) and airline_name = %s"
+            FROM purchases NATURAL JOIN ticket WHERE date(purchase_date) between DATE(NOW()) - INTERVAL 1 MONTH AND DATE(NOW()) and airline_name = %s"
         cursor.execute(query, (airline_name))
         info = cursor.fetchone()
         total_sales = info['total_sales'] #total sales
-        from_date  = info['curr_prev'] # from_date
+        from_date = info['curr_prev'] # from_date
         to_date = info['current'] # to_date
         from_date_format = from_date
         to_date_format = to_date
@@ -476,8 +480,8 @@ def viewReport(message):
         to_date_format = datetime.strptime(to_date, '%Y-%m-%d')   
         #access total_sales
         cursor = conn.cursor()
-        query = "SELECT COUNT(*) as total_sales FROM ticket WHERE date(purchase_time) >= %s \
-        AND date(purchase_time) <= %s and airline_name = %s"
+        query = "SELECT COUNT(*) as total_sales FROM purchases NATURAL JOIN ticket WHERE date(purchase_date) >= %s \
+        AND date(purchase_date) <= %s and airline_name = %s"
         cursor.execute(query, (from_date, to_date, airline_name))
         info = cursor.fetchone()
         total_sales = info['total_sales'] #total sales
@@ -490,7 +494,7 @@ def viewReport(message):
             #access total_sales and date range
             cursor = conn.cursor()
             query = "SELECT DATE(NOW()) - INTERVAL 1 MONTH AS curr_prev, DATE(NOW()) AS current,  COUNT(*) AS total_sales \
-            FROM ticket WHERE date(purchase_time) between DATE(NOW()) - INTERVAL 1 MONTH AND DATE(NOW()) and airline_name = %s"
+            FROM purchases NATURAL JOIN ticket WHERE date(purchase_date) between DATE(NOW()) - INTERVAL 1 MONTH AND DATE(NOW()) and airline_name = %s"
             cursor.execute(query, (airline_name))
             info = cursor.fetchone()
             total_sales = info['total_sales'] #total sales
@@ -505,7 +509,7 @@ def viewReport(message):
             #access total_sales and date range
             cursor = conn.cursor()
             query = "SELECT DATE(NOW()) AS current, DATE(NOW()) - INTERVAL 1 YEAR AS curr_prev , COUNT(*) as total_sales \
-                FROM ticket WHERE date(purchase_time) between DATE(NOW()) - INTERVAL 1 YEAR AND DATE(NOW()) and airline_name = %s"
+                FROM purchases NATURAL JOIN ticket WHERE date(purchase_date) between DATE(NOW()) - INTERVAL 1 YEAR AND DATE(NOW()) and airline_name = %s"
             cursor.execute(query, (airline_name))
             info = cursor.fetchone()
             print(info)
@@ -518,8 +522,8 @@ def viewReport(message):
             title = "Total Sales for the Past Year"
     
     #access sales by month
-    query = "SELECT YEAR(purchase_time) as year, MONTH(purchase_time) as month, COUNT(*) as total_sales \
-    FROM ticket WHERE date(purchase_time) >= %s AND date(purchase_time) <= %s and airline_name = %s \
+    query = "SELECT YEAR(purchase_date) as year, MONTH(purchase_date) as month, COUNT(*) as total_sales \
+    FROM purchases NATURAL JOIN ticket WHERE date(purchase_date) >= %s AND date(purchase_date) <= %s and airline_name = %s \
     GROUP BY year, month \
     ORDER BY year, month ASC"
     cursor.execute(query, (from_date, to_date, airline_name))
@@ -574,8 +578,8 @@ def viewReport(message):
     except: 
         mymax = 100
     
-    return render_template('report.html', sales = True, default = default, title = title, total_sales = total_sales, \
-    max = mymax, from_date = from_date, to_date = to_date, labels=label_list, values=values_list)
+    return render_template('report.html', sales = True, default = default, title = title, total_sales = total_sales,
+                           max = mymax, from_date = from_date, to_date = to_date, labels=label_list, values=values_list)
 
 
 @staff.route('/report/revenueCompare', methods = ['GET', 'POST'])
@@ -593,24 +597,24 @@ def revenueCompare():
         option = request.form.get("revSelect")
         if option == "rev_past_month":
             title = "Revenue comparison for the past month"
-            query_direct = "SELECT SUM(sold_price) as total_price FROM ticket \
-                WHERE agent_email IS NULL and DATE(purchase_time) BETWEEN DATE(NOW()) - INTERVAL 1 MONTH and DATE(NOW())"
-            query_indirect = "SELECT SUM(sold_price) as total_price FROM ticket \
-                WHERE agent_email IS NOT NULL and DATE(purchase_time) BETWEEN DATE(NOW()) - INTERVAL 1 MONTH and DATE(NOW())"
+            query_direct = "SELECT SUM(price) as total_price FROM ticket NATURAL JOIN purchases NATURAL JOIN flight\
+                WHERE booking_agent_id IS NULL and DATE(purchase_date) BETWEEN DATE(NOW()) - INTERVAL 1 MONTH and DATE(NOW())"
+            query_indirect = "SELECT SUM(price) as total_price FROM ticket NATURAL JOIN purchases NATURAL JOIN flight \
+                WHERE booking_agent_id IS NOT NULL and DATE(purchase_date) BETWEEN DATE(NOW()) - INTERVAL 1 MONTH and DATE(NOW())"
         else: 
             title = "Revenue comparison for the past year"
-            query_direct = "SELECT SUM(sold_price) as total_price FROM ticket \
-                WHERE agent_email IS NULL and DATE(purchase_time) BETWEEN DATE(NOW()) - INTERVAL 1 YEAR and DATE(NOW())"
-            query_indirect = "SELECT SUM(sold_price) as total_price FROM ticket \
-                WHERE agent_email IS NOT NULL and DATE(purchase_time) BETWEEN DATE(NOW()) - INTERVAL 1 YEAR and DATE(NOW())"
+            query_direct = "SELECT SUM(price) as total_price FROM ticket NATURAL JOIN purchases NATURAL JOIN flight \
+                WHERE booking_agent_id IS NULL and DATE(purchase_date) BETWEEN DATE(NOW()) - INTERVAL 1 YEAR and DATE(NOW())"
+            query_indirect = "SELECT SUM(price) as total_price FROM ticket NATURAL JOIN purchases NATURAL JOIN flight \
+                WHERE booking_agent_id IS NOT NULL and DATE(purchase_date) BETWEEN DATE(NOW()) - INTERVAL 1 YEAR and DATE(NOW())"
 
     else: 
         default = "Default:"
         title = "Revenue comparison for the past month"
-        query_direct = "SELECT SUM(sold_price) as total_price FROM ticket \
-            WHERE agent_email IS NULL and DATE(purchase_time) BETWEEN DATE(NOW()) - INTERVAL 1 MONTH and DATE(NOW())"
-        query_indirect = "SELECT SUM(sold_price) as total_price FROM ticket \
-            WHERE agent_email IS NOT NULL and DATE(purchase_time) BETWEEN DATE(NOW()) - INTERVAL 1 MONTH and DATE(NOW())"
+        query_direct = "SELECT SUM(price) as total_price FROM ticket NATURAL JOIN purchases NATURAL JOIN flight \
+            WHERE booking_agent_id IS NULL and DATE(purchase_date) BETWEEN DATE(NOW()) - INTERVAL 1 MONTH and DATE(NOW())"
+        query_indirect = "SELECT SUM(price) as total_price FROM ticket NATURAL JOIN purchases NATURAL JOIN flight \
+            WHERE booking_agent_id IS NOT NULL and DATE(purchase_date) BETWEEN DATE(NOW()) - INTERVAL 1 MONTH and DATE(NOW())"
 
     cursor.execute(query_direct)
     direct_sales = cursor.fetchone()
@@ -619,7 +623,8 @@ def revenueCompare():
     indirect_sales = cursor.fetchone()
 
     labels = ['direct_sales', 'indirect_sales']
-    values = [float(direct_sales["total_price"]), float(indirect_sales["total_price"])]
+    values = [float(direct_sales["total_price"]) if direct_sales["total_price"] is not None else 0,
+              float(indirect_sales["total_price"]) if indirect_sales["total_price"] is not None else 0]
 
     print(values)
 
@@ -643,22 +648,22 @@ def topDestination():
         chosen = request.form.get("seeSelect")
         if chosen == "by_3month": 
             title = "Top Three Destinations for the Past Three Months"
-            query = "SELECT arr_at, city, count(*) as visit_time \
-                    FROM ticket NATURAL JOIN flight as S, airport \
-                    WHERE S.arr_at  = airport.name AND DATE(purchase_time) BETWEEN NOW() - INTERVAL 3 MONTH and NOW()\
-                    GROUP BY arr_at ORDER BY visit_time DESC LIMIT 3"
+            query = "SELECT arrival_airport, airport_city, count(*) as visit_time \
+                    FROM purchases NATURAL JOIN ticket NATURAL JOIN flight as S, airport \
+                    WHERE S.arrival_airport  = airport.airport_name AND DATE(purchase_date) BETWEEN NOW() - INTERVAL 3 MONTH and NOW()\
+                    GROUP BY arrival_airport ORDER BY visit_time DESC LIMIT 3"
         else: 
             title = "Top Three Destinations for the Past Year"
-            query = "SELECT arr_at, city, count(*) as visit_time \
-                    FROM ticket NATURAL JOIN flight as S, airport \
-                    WHERE S.arr_at  = airport.name AND DATE(purchase_time) BETWEEN NOW() - INTERVAL 1 YEAR and NOW()\
-                    GROUP BY arr_at ORDER BY visit_time DESC LIMIT 3"
+            query = "SELECT arrival_airport, airport_city, count(*) as visit_time \
+                    FROM purchases NATURAL JOIN ticket NATURAL JOIN flight as S, airport \
+                    WHERE S.arrival_airport  = airport.airport_name AND DATE(purchase_date) BETWEEN NOW() - INTERVAL 1 YEAR and NOW()\
+                    GROUP BY arrival_airport ORDER BY visit_time DESC LIMIT 3"
     else: 
         title = "Default: Top Three Destinations for the Past Three Months"
-        query = "SELECT arr_at, city, count(*) as visit_time \
-                FROM ticket NATURAL JOIN flight as S, airport \
-                WHERE S.arr_at  = airport.name AND DATE(purchase_time) BETWEEN NOW() - INTERVAL 3 MONTH and NOW() \
-                GROUP BY arr_at ORDER BY visit_time DESC LIMIT 3"
+        query = "SELECT arrival_airport, airport_city, count(*) as visit_time \
+                FROM purchases NATURAL JOIN ticket NATURAL JOIN flight as S, airport \
+                WHERE S.arrival_airport  = airport.airport_name AND DATE(purchase_date) BETWEEN NOW() - INTERVAL 3 MONTH and NOW() \
+                GROUP BY arrival_airport ORDER BY visit_time DESC LIMIT 3"
     #execute the query 
     cursor = conn.cursor()
     cursor.execute(query)

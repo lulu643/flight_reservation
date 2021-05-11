@@ -1,15 +1,7 @@
 {% extends 'layout.html' %}
 
-{% block head %} 
+{% block body %}
 
-{% endblock %}
-
-{% block body %} 
-<div class="topBar">
-        <div class="logo">Airline Ticket System</div>
-</div>
-
-<div class="line"></div>
 <div class="title">Register</div>
 <div class="wrapper">
     <select name="role" id = "mySelect" onchange="changeRole()">
@@ -112,10 +104,6 @@
         <div class="inputBlock">
                 <label for="airline_name">airline name:</label>
                 <input type="text" name = "airline_name"/> </br>
-            </div>
-        <div class="inputBlock">
-                <label for="phone_number">phone numbers, delimited by ";":</label>
-                <input type="text" id = "phone_number" name = "phone_number"> </br>
             </div>
         <input class="registerButton" type="submit" value = "Register" />    
     </form>

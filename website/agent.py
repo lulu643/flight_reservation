@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, session
-from .database import conn
+from .DB_connector import conn
 from .login_required import agent_login_required
 import datetime
 
@@ -22,18 +22,18 @@ def commission():
         if datetime.datetime.strptime(from_date, "%Y-%m-%d") > datetime.datetime.strptime(to_date, "%Y-%m-%d"):
             return render_template("commission.html", error="The dates you entered are invalid.")
         cursor = conn.cursor()
-        query = "SELECT IFNULL(SUM(sold_price) , 0) as total_price, IFNULL(COUNT(*) , 0) as ticket_num FROM ticket WHERE DATE(purchase_time) BETWEEN %s AND %s AND agent_email = %s"
+        query = "SELECT IFNULL(SUM(price) , 0) as total_price, IFNULL(COUNT(*) , 0) as ticket_num FROM ticket NATURAL JOIN flight NATURAL JOIN purchases NATURAL JOIN booking_agent WHERE DATE(purchase_date) BETWEEN %s AND %s AND email = %s "
         cursor.execute(query, (from_date, to_date, session['email']))
         data = cursor.fetchone()
         conn.commit()
         cursor.close()
         total_price = "{0:.2f}".format(float(data['total_price']) * 0.1)
-        average_commission = "{0:.2f}".format(float(data['total_price']) * 0.1 / float(data['ticket_num']))
+        average_commission = "{0:.2f}".format(float(data['total_price']) * 0.1 / float(data['ticket_num'])) if data['ticket_num'] != 0 else 0.00
         return render_template("commission.html", total_price=total_price, average_commission=average_commission,
                                ticket_num=data['ticket_num'], from_date=from_date, to_date=to_date)
     else:
         cursor = conn.cursor()
-        query = "SELECT IFNULL(SUM(sold_price) , 0) as total_price, IFNULL(COUNT(*) ,0) as ticket_num FROM ticket WHERE DATE(purchase_time) BETWEEN NOW() - INTERVAL 30 DAY AND NOW() + INTERVAL 1 DAY AND agent_email = %s"
+        query = "SELECT IFNULL(SUM(price) , 0) as total_price, IFNULL(COUNT(*) ,0) as ticket_num FROM ticket NATURAL JOIN flight NATURAL JOIN purchases NATURAL JOIN booking_agent WHERE DATE(purchase_date) BETWEEN NOW() - INTERVAL 30 DAY AND NOW() + INTERVAL 1 DAY AND email = %s"
         cursor.execute(query, (session['email']))
         data = cursor.fetchone()
         conn.commit()
@@ -55,7 +55,7 @@ def commission():
 @agent_login_required
 def topCustomers():
     cursor = conn.cursor()
-    query = "SELECT cust_email, count(*) as num FROM ticket WHERE DATE(purchase_time) BETWEEN NOW() - INTERVAL 6 MONTH AND NOW() + INTERVAL 1 DAY AND agent_email = %s GROUP BY cust_email ORDER BY num DESC LIMIT 5"
+    query = "SELECT customer_email, count(*) as num FROM purchases NATURAL JOIN booking_agent WHERE DATE(purchase_date) BETWEEN NOW() - INTERVAL 6 MONTH AND NOW() + INTERVAL 1 DAY AND email = %s GROUP BY customer_email ORDER BY num DESC LIMIT 5"
     cursor.execute(query, (session['email']))
     data = cursor.fetchall()
     print(data)
@@ -69,7 +69,7 @@ def topCustomers():
     except:
         mymax = 10
 
-    query = "SELECT cust_email, SUM(sold_price) as sum FROM ticket WHERE DATE(purchase_time) BETWEEN NOW() - INTERVAL 1 YEAR AND NOW() + INTERVAL 1 DAY AND agent_email = %s GROUP BY cust_email ORDER BY sum DESC LIMIT 5"
+    query = "SELECT customer_email, SUM(price) as sum FROM ticket NATURAL JOIN flight NATURAL JOIN purchases NATURAL JOIN booking_agent WHERE DATE(purchase_date) BETWEEN NOW() - INTERVAL 1 YEAR AND NOW() + INTERVAL 1 DAY AND email = %s GROUP BY customer_email ORDER BY sum DESC LIMIT 5"
     cursor.execute(query, (session['email']))
     data2 = cursor.fetchall()
     print(data2)

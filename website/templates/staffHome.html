@@ -1,47 +1,65 @@
 {% extends 'layout.html' %}
 
-{% block head %} 
-
-{% endblock %}
-
 {% block body %}
-<div class="topBar">
-    <div class="logo">Airline Ticket System</div>
-</div>
-
-<div class="line"></div>
-    {% if not error %}
-    <div class="container">
-        <div class="sidebar">
-            <div class="info"> 
-                    <b> Staff Information: </b> </br>
-                        Name: {{session["first_name"]}} {{session["last_name"]}} </br>
-                    Company: {{session["airline_name"]}} </br>
-                </div>
-        </br>
-            <a href = "/staffHome" class = "option"> Home </a>  
-            <a href = "/flightManage" class = "option"> Flights Management </a> 
-            <a href = "/airSystemManage/airplane" class = "option"> Airplanes Management</a>   
-            <a href = "/airSystemManage/airport" class = "option"> Airports Management</a> 
-            <a href = "/flightManage" class = "option"> View Ratings</a>
-            <a href = "/report/topAgent" class = "option"> View Top Booking Agents</a>  
-            <a href = "/report/topCustomer" class = "option"> View Top Customers</a> 
-            <a href = "/report/salesReport/default" class = "option"> View Reports </a> 
-            <a href = "/report/revenueCompare" class = "option"> Revenue Comparison </a> 
-            <a href = "/report/topDestination" class = "option"> Top Destination </a> 
-            <a href="/logout" class="option">Log out</a>
-        </div>
-
-        <div class="content">
-            <div class="title">Welcome, {{username}}.</div>
-
-        </div>
+<nav class="navbar navbar-light" style="background-color: #e3f2fd;">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">StaffHome</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" href="/staffHome">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="/flightManage">Flights Management</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="/airSystemManage/airplane">Airplanes Management</a>
+        </li>
+          <li class="nav-item">
+          <a class="nav-link active" href="/airSystemManage/airport">Airports Management</a>
+        </li>
+          <li class="nav-item">
+          <a class="nav-link active" href="/flightManage">View Ratings</a>
+        </li>
+          <li class="nav-item">
+          <a class="nav-link active" href="/report/topAgent">View Top Booking Agents</a>
+        </li>
+          <li class="nav-item">
+          <a class="nav-link active" href="/report/topCustomer">View Top Customers</a>
+        </li>
+         <li class="nav-item">
+          <a class="nav-link active" href="/report/salesReport/default">View Reports</a>
+        </li>
+         <li class="nav-item">
+          <a class="nav-link active" href="/report/revenueCompare">Revenue Comparison</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="/report/topDestination">Top Destination</a>
+        </li>
+          <li class="nav-item">
+          <a class="nav-link active" href="/logout">Log out</a>
+        </li>
+      </ul>
     </div>
-    {% endif %}
-    {% if error %}
-        <p class="error"><strong>Error:</strong> {{error}}</p>
-        <a href="/login">Go back to Login</a>
-    {% endif %}
+  </div>
+</nav>
 
-    <script src="{{ url_for('static',filename='js/script.js')}}"></script>
+
+{% if not error %}
+
+    <div class="content">
+        <div class="title">Welcome, {{username}}.</div>
+    </div>
+{% endif %}
+
+{% if error %}
+    <p class="error"><strong>Error:</strong> {{error}}</p>
+    <a href="/login">Go back to Login</a>
+{% endif %}
+
+<script src="{{ url_for('static',filename='js/script.js')}}"></script>
+
 {% endblock %}
