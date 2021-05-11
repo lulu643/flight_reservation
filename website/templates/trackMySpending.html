@@ -1,101 +1,87 @@
 {% extends 'layout.html' %}
 
+{% block head %}
+
+{% endblock %}
 {% block body %}
-
-<nav class="navbar navbar-light" style="background-color: #e3f2fd;">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="#">CustomerHome</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link active" href="/customerHome" >Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" href="/viewMyFlights">View My Flights</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" href="/searchForFlights">Search for Flights</a>
-        </li>
-          <li class="nav-item">
-          <a class="nav-link active" href="/comments">Give Comments</a>
-        </li>
-          <li class="nav-item">
-          <a class="nav-link active" href="/trackMySpending">Track My Spending</a>
-        </li>
-          <li class="nav-item">
-          <a class="nav-link active" href="/logout">Log out</a>
-        </li>
-      </ul>
-    </div>
-  </div>
-</nav>
-
-<div class="content">
-    <div class="title">Track My Spending</div>
-
-    <form class="spending" action="/trackMySpending" method="POST">
-        <div class="inputBlock">
-            <label class="dateLabel" for="from_date">from date: </label>
-            <input type="date" name = "from_date" required/></br>
-        </div>
-        <div class="inputBlock">
-            <label class="dateLabel" for="to_date">to date: </label>
-            <input type="date" name = "to_date" required/></br>
-        </div>
-        <input type="submit" class="dateSubmit" value="view spending within this range"> <br>
-    </form>
-
-    {% if error %}
-    <div class="spending totalSpending">{{error}}</div>
-    {% else %}
-    <div class="spending totalSpending">The total spending from {{from_date}} to {{to_date}} is {{total_spending}}.</div>
-    <div class="spending canvas">
-            <canvas id="chart" width="600" height="400"></canvas>
-            <script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js'></script>
-            <script>
-                // bar chart data
-                var barData = {
-                labels : [
-                    {% for item in labels %}
-                    "{{ item }}",
-                    {% endfor %}
-            ],
-                datasets : [{
-                    fillColor: "rgba(151,187,205,0.2)",
-                    strokeColor: "rgba(151,187,205,1)",
-                    pointColor: "rgba(151,187,205,1)",
-                    data : [
-                    {% for item in values %}
-                        "{{ item }}",
-                        {% endfor %}
-                ]
-                    }
-                ]
-                }
-                // get bar chart canvas
-                var mychart = document.getElementById("chart").getContext("2d");
-                max = {{max}};
-                steps = 10;
-                // draw bar chart
-                new Chart(mychart).Bar(barData, {
-                scaleOverride: true,
-                scaleSteps: steps,
-                scaleStepWidth: Math.ceil(max / steps),
-                scaleStartValue: 0,
-                scaleShowVerticalLines: true,
-                scaleShowGridLines : true,
-                barShowStroke : true,
-                scaleShowLabels: true
-                }
-                );
-            </script>
-    </div>
-    {% endif %}
-
+<div class="topBar">
+    <div class="logo">Airline Ticket System</div>
 </div>
 
+<div class="line"></div>
+<div class="container">
+        <div class="sidebar">
+                <a href="/customerHome" class="option">Home</a>
+                <a href="/viewMyFlights" class="option">View My Flights</a>
+                <a href="/searchForFlights" class="option">Search for Flights</a>
+                <a href="/comments" class="option">Give Comments</a>
+                <a href="/trackMySpending" class="option">Track My Spending</a>
+                <a href="/logout" class="option">Log out</a>
+        </div>
+
+    <div class="content">
+        <div class="title">Track My Spending</div>
+
+        <form class="spending" action="/trackMySpending" method="POST">
+            <div class="inputBlock">
+                <label class="dateLabel" for="from_date">from date: </label>
+                <input type="date" name = "from_date" required/></br>
+            </div>
+            <div class="inputBlock">
+                <label class="dateLabel" for="to_date">to date: </label>
+                <input type="date" name = "to_date" required/></br>
+            </div>
+            <input type="submit" class="dateSubmit" value="view spending within this range"> <br>
+        </form>
+
+        {% if error %}
+        <div class="spending totalSpending">{{error}}</div>
+        {% else %}
+        <div class="spending totalSpending">The total spending from {{from_date}} to {{to_date}} is {{total_spending}}.</div>
+        <div class="spending canvas">
+                <canvas id="chart" width="600" height="400"></canvas>
+                <script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js'></script>
+                <script>
+                    // bar chart data
+                    var barData = {
+                    labels : [
+                        {% for item in labels %}
+                        "{{ item }}",
+                        {% endfor %}
+                ],
+                    datasets : [{
+                        fillColor: "rgba(151,187,205,0.2)",
+                        strokeColor: "rgba(151,187,205,1)",
+                        pointColor: "rgba(151,187,205,1)",
+                        data : [
+                        {% for item in values %}
+                            "{{ item }}",
+                            {% endfor %}
+                    ]
+                        }
+                    ]
+                    }
+                    // get bar chart canvas
+                    var mychart = document.getElementById("chart").getContext("2d");
+                    max = {{max}};
+                    steps = 10;
+                    // draw bar chart
+                    new Chart(mychart).Bar(barData, {
+                    scaleOverride: true,
+                    scaleSteps: steps,
+                    scaleStepWidth: Math.ceil(max / steps),
+                    scaleStartValue: 0,
+                    scaleShowVerticalLines: true,
+                    scaleShowGridLines : true,
+                    barShowStroke : true,
+                    scaleShowLabels: true
+                    }
+                    );
+                </script>
+        </div>
+        {% endif %}
+
+    </div>
+</div>
 
 {% endblock %}

@@ -1,7 +1,15 @@
 {% extends 'layout.html' %}
 
-{% block body %}
+{% block head %}
 
+{% endblock %}
+
+{% block body %}
+<div class="topBar">
+        <div class="logo">Airline Ticket System</div>
+</div>
+
+<div class="line"></div>
 <div class="title">Login</div>
 <div class="wrapper">
     <select name="role" id = "mySelect" onchange="changeRole()">
@@ -10,7 +18,7 @@
         <option value="staff">Airline Staff</option>
     </select>
 
-    <form action="/loginAuthCustomer" id = "customerForm" method="POST" onsubmit="return checkForm();">
+    <form action="/loginCustomer" id = "customerForm" method="POST" onsubmit="return checkForm();">
         <input class="login" type="text" name = "email" placeholder="email"/> </br>
         <input class="login" type="password" name = "password" placeholder="password"/></br>
         <input class="login" type="submit" value = Login />
@@ -21,11 +29,11 @@
         <input class="login" type="password" name = "password" placeholder="password"/></br>
         <input class="login" type="submit" value = Login />
     </form>
-    
+
     <form action="/loginAuthStaff" id = "staffForm" method="POST" onsubmit="return checkForm();">
         <input class="login" type="text" name = "username" placeholder="username"/> </br>
         <input class="login" type="password" name = "password" placeholder="password"/></br>
-        <input class="login" type="submit" value = Login />    
+        <input class="login" type="submit" value = Login />
     </form>
 
     <a href="/" class="back">Back</a>
@@ -34,4 +42,4 @@
     {% endif %}
 </div>
     <script src="{{ url_for('static',filename='js/login.js')}}"></script>
-{% endblock %} 
+{% endblock %}

@@ -1,149 +1,119 @@
 {% extends 'layout.html' %}
 
+{% block head %}
+
+{% endblock %}
 {% block body %}
+<div class="topBar">
+    <div class="logo">Airline Ticket System</div>
+</div>
 
+<div class="line"></div>
+<div class="container">
     {%if role == 'agent' %}
-
-<nav class="navbar navbar-light" style="background-color: #e3f2fd;">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="#">AgentHome</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent1">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link active" href="/agentHome">Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" href="/viewMyFlights">view flights</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" href="/searchForFlights">Searching Flights</a>
-        </li>
-          <li class="nav-item">
-          <a class="nav-link active" href="/commission">View My Comission</a>
-        </li>
-          <li class="nav-item">
-          <a class="nav-link active" href="/topCustomers">Top Customers</a>
-        </li>
-          <li class="nav-item">
-          <a class="nav-link active" href="/logout">Log out</a>
-        </li>
-      </ul>
+    <div class="sidebar">
+        <a href="/agentHome" class="option">Home</a>
+        <a href="/viewMyFlights" class="option">View My Flights</a>
+        <a href="/searchForFlights" class="option">Search for Flights</a>
+        <a href="/commission" class="option">View My Comission</a>
+        <a href="/topCustomers" class="option">Top Customers</a>
+        <a href="/logout" class="option">Log out</a>
     </div>
-  </div>
-</nav>
-
-
     {% else %}
-
-    <nav class="navbar navbar-light" style="background-color: #e3f2fd;">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="#">CustomerHome</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent2">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link active" href="/customerHome" >Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" href="/viewMyFlights">View My Flights</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" href="/searchForFlights">Search for Flights</a>
-        </li>
-          <li class="nav-item">
-          <a class="nav-link active" href="/comments">Give Comments</a>
-        </li>
-          <li class="nav-item">
-          <a class="nav-link active" href="/trackMySpending">Track My Spending</a>
-        </li>
-          <li class="nav-item">
-          <a class="nav-link active" href="/logout">Log out</a>
-        </li>
-      </ul>
+    <div class="sidebar">
+        <a href="/customerHome" class="option">Home</a>
+        <a href="/viewMyFlights" class="option">View My Flights</a>
+        <a href="/searchForFlights" class="option">Search for Flights</a>
+        <a href="/trackMySpending" class="option">Track My Spending</a>
+        <a href="/logout" class="option">Log out</a>
     </div>
-  </div>
-</nav>
-
-
     {% endif %}
 
     <div class="content">
-        <div class="title">Purchase Details</div>
-        <table>
-            <th> Airline Name </th>
-            <th> Flight Number </th>
-            <th> Departure Time </th>
-            <th> Arrival Time </th>
-            <th> Departure from </th>
-            <th> Departure City </th>
-            <th> Arrive at </th>
-            <th> Arrival City </th>
-            <th> Price </th>
-            <tr>
-                <td class="dept_flight" id="dept_airline">{{flight['airline_name']}}</td>
-                <td class="dept_flight" id="dept_num">{{flight['flight_num']}}</td>
-                <td class="dept_flight" id="dept_time">{{flight['dept_time']}}</td>
-                <td class="dept_flight">{{flight['arr_time']}}</td>
-                <td class="dept_flight">{{flight['dept_from']}}</td>
-                <td class="dept_flight">{{flight['city']}}</td>
-                <td class="dept_flight">{{flight['arr_at']}}</td>
-                <td class="dept_flight">{{flight['B.city']}}</td>
-                <td class="dept_flight" id="dept_price">{{flight['current_price']}}</td>
-            </tr>
-            {% if return_flight %}
-            <tr>
-                <td class="dept_flight" id="return_airline">{{return_flight['airline_name']}}</td>
-                <td class="dept_flight" id="return_num">{{return_flight['flight_num']}}</td>
-                <td class="dept_flight" id="return_time">{{return_flight['dept_time']}}</td>
-                <td class="dept_flight">{{return_flight['arr_time']}}</td>
-                <td class="dept_flight">{{return_flight['dept_from']}}</td>
-                <td class="dept_flight">{{return_flight['city']}}</td>
-                <td class="dept_flight">{{return_flight['arr_at']}}</td>
-                <td class="dept_flight">{{return_flight['B.city']}}</td>
-                <td class="dept_flight" id="return_price">{{return_flight['current_price']}}</td>
-            </tr>
-            {% endif %}
-        </table>
-        <div class="totalPrice">
-            <span>Total:</span><span id="total">{{total}}</span><br>
-        </div>
-        <form class="payment">
-            <fieldset>
-                <legend>Payment Info</legend>
-                {% if role == 'agent' %}
+        <div class="title">Search for Flights</div>
+        <div id="searchBlock">
+
+            <form action="/purchaseTickets" class="searchForm" method="POST" onsubmit="return checkForm();">
+                {%if role == 'agent' %}
                 <div class="inputBlock">
-                    <label for="cust_name">Customer Email:</label>
-                    <input type="email" name="cust_email" id="cust_email">
+                    <label for="customer_email">Customer email:</label>
+                    <input type="text" name = "customer_email" placeholder="please enter the email of your customer" required/> </br>
                 </div>
                 {% endif %}
                 <div class="inputBlock">
-                    <label for="name">Name on Card:</label>
-                    <input type="text" name="Name" id="name">
+                    <label for="airline_name">Airline Name:</label>
+                    <input type="text" name = "airline_name" placeholder="enter the airline name" required/> </br>
                 </div>
                 <div class="inputBlock">
-                    <label for="cardnum">Card Number:</label>
-                    <input type="number" name="Card number" id="cardnum">
+                    <label for="flight_num">Flight number:</label>
+                    <input type="text" name = "flight_num" placeholder="please enter the flight number" required/> </br>
                 </div>
-                <div class="inputBlock">
-                    <label for="expr">Expr Date:</label>
-                    <input type="month" name="Expr Date" id="expr">
-                </div>
-                <div class="element">Credit Card<input type="radio" name="Card type" id="credit" checked value="credit"></div>
-                <div class="element">Debit Card<input type="radio" name="Card type" id="debit" value="debit"> </div>
-            </fieldset>
-        </form>
-        <button id="checkOut" style="margin-top: 20px; margin-right: 20px; border: none; color: white; background-color: #E83015; padding: 6px 10px;border-radius: 2px; font-size: small; margin-left: 20px;" onclick="checkOut()">Check out</button>
-        <a href="/searchForFlights" class="back">Back</a>
-    </div>
 
+
+                <input class='dateSubmit' type="submit" value = "Purchase"> <br>
+            </form>
+        </div>
+
+        {% if flight %}
+
+            <h2>This is the flight you bought</h2>
+
+            <table>
+                <th> Airline Name </th>
+                <th> Flight Number </th>
+                <th> Departure Time </th>
+                <th> Arrival Time </th>
+                <th> Departure from </th>
+                <th> Arrive at </th>
+                <th> Price </th>
+
+
+                <tr>
+                    <td class="dept_flight">{{flight['airline_name']}}</td>
+                    <td class="dept_flight">{{flight['flight_num']}}</td>
+                    <td class="dept_flight">{{flight['departure_time']}}</td>
+                    <td class="dept_flight">{{flight['arrival_time']}}</td>
+                    <td class="dept_flight">{{flight['departure_airport']}}</td>
+                    <td class="dept_flight">{{flight['arrival_airport']}}</td>
+                    <td class="dept_flight">{{flight['price']}}</td>
+
+
+                </tr>
+
+            </table>
+
+        {% if returnFlights %}
+            <h2>Return Flights</h2>
+            <table>
+
+            {% for line in returnFlights %}
+                <tr>
+                    <td class="return_flight">{{line['airline_name']}}</td>
+                    <td class="return_flight">{{line['flight_num']}}</td>
+                    <td class="return_flight">{{line['departure_time']}}</td>
+                    <td class="return_flight">{{line['arrival_time']}}</td>
+                    <td class="return_flight">{{line['departure_airport']}}</td>
+                    <td class="return_flight">{{line['airport_city']}}</td>
+                    <td class="return_flight">{{line['arrival_airport']}}</td>
+                    <td class="return_flight">{{line['B.airport_city']}}</td>
+                    <td class="return_flight">{{line['price']}}</td>
+
+                </tr>
+            {% endfor %}
+            </table>
+        {% endif %}
+
+
+        <a href="/purchaseTickets" class="option">Purchase Tickets</a>
+
+        {% endif %}
+        {% if error %}
+            <p class="error"><strong>Error:</strong> {{error}}</p>
+        {% endif %}
+    </div>
+</div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-<script>
-    var url = "/js/purchase.js";
-    $.getScript(url);
-</script>
+<script src="{{ url_for('static',filename='js/script.js')}}"></script>
+<script src="{{ url_for('static',filename='js/purchase.js')}}"></script>
+
 {% endblock %}

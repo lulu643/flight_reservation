@@ -1,103 +1,54 @@
 {% extends 'layout.html' %}
 
-{% block body %} 
+{% block head %}
 
-{%if role == 'agent' %}
+{% endblock %}
+{% block body %}
+<div class="topBar">
+    <div class="logo">You are now viewing  flights!</div>
+</div>
 
-    <nav class="navbar navbar-light" style="background-color: #e3f2fd;">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="#">AgentHome</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent1">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-              <a class="nav-link active" href="/agentHome">Home</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link active" href="/viewMyFlights">view flights</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link active" href="/searchForFlights">Searching Flights</a>
-            </li>
-              <li class="nav-item">
-              <a class="nav-link active" href="/commission">View My Comission</a>
-            </li>
-              <li class="nav-item">
-              <a class="nav-link active" href="/topCustomers">Top Customers</a>
-            </li>
-              <li class="nav-item">
-              <a class="nav-link active" href="/logout">Log out</a>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </nav>
-
-
+<div class="line"></div>
+<div class="container">
+    {%if role == 'agent' %}
+    <div class="sidebar">
+        <a href="/agentHome" class="option">Home</a>
+        <a href="/viewMyFlights" class="option">View My Flights</a>
+        <a href="/searchForFlights" class="option">Search for Flights</a>
+        <a href="/commission" class="option">View My Comission</a>
+        <a href="/topCustomers" class="option">Top Customers</a>
+        <a href="/logout" class="option">Log out</a>
+    </div>
     {% else %}
-
-    <nav class="navbar navbar-light" style="background-color: #e3f2fd;">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="#">CustomerHome</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent2">
-          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-              <a class="nav-link active" href="/customerHome" >Home</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link active" href="/viewMyFlights">View My Flights</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link active" href="/searchForFlights">Search for Flights</a>
-            </li>
-              <li class="nav-item">
-              <a class="nav-link active" href="/comments">Give Comments</a>
-            </li>
-              <li class="nav-item">
-              <a class="nav-link active" href="/trackMySpending">Track My Spending</a>
-            </li>
-              <li class="nav-item">
-              <a class="nav-link active" href="/logout">Log out</a>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </nav>
+    <div class="sidebar">
+        <a href="/customerHome" class="option">Home</a>
+        <a href="/viewMyFlights" class="option">View My Flights</a>
+        <a href="/searchForFlights" class="option">Search for Flights</a>
+        <a href="/trackMySpending" class="option">Track My Spending</a>
+        <a href="/logout" class="option">Log out</a>
+    </div>
     {% endif %}
 
 
     <div class="content">
-        <div class="title">Future Flights</div>
+        <div class="title">upcoming Flights</div>
         <table>
             <th> Airline Name </th>
             <th> Flight Number </th>
             <th> Departure Time </th>
             <th> Arrival Time </th>
-            <th> Departure from </th>
-            <th> Departure City </th>
-            <th> Arrive at </th>
-            <th> Arrival City </th>
             <th> Price </th>
             {% for line in flights %}
             <tr>
                 <td>{{line['airline_name']}}</td>
                 <td>{{line['flight_num']}}</td>
-                <td>{{line['dept_time']}}</td>
-                <td>{{line['arr_time']}}</td>
-                <td>{{line['dept_from']}}</td>
-                <td>{{line['city']}}</td>
-                <td>{{line['arr_at']}}</td>
-                <td>{{line['B.city']}}</td>
-                <td>{{line['sold_price']}}</td>
+                <td>{{line['departure_time']}}</td>
+                <td>{{line['arrival_time']}}</td>
+                <td>{{line['price']}}</td>
             </tr>
             {% endfor %}
         </table>
     </div>
-
+</div>
 
 {% endblock %}
