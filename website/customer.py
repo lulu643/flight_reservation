@@ -171,15 +171,13 @@ def purchaseTickets():
     data_1 = ' '
     if request.method == 'POST':
 
-
-
-
+        customer_email = request.form['customer_email']
         airline_name = request.form['airline_name']
         print("HERERERRRERRERRERRRERE\n",airline_name )
         flight_num = request.form['flight_num']
         print("FLight_NUM\n", type(flight_num))
 
-        customer_email = session['email']
+
 
         ##customer_email = request.form['customer_email']
 
