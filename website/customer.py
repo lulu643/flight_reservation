@@ -51,15 +51,20 @@ def viewMyFlights():
 
         current_date = datetime.datetime.now()
 
-        query = "select * from ticket natural join purchases join flight  where customer_email = %s and departure_time > %s"
+        query = "select * from purchases natural join ticket"\
+                " join flight on flight.flight_num= ticket.flight_num where purchases.customer_email = %s and flight.departure_time > %s"
 
         cursor.execute(query, (email, current_date))
 
         data1 = cursor.fetchall()
 
+        print("THIS IS DATA")
+        print("STARTS HERE")
+        for i in data1:
+            print("THIS\n",i)
 
+        print("ENDS HERE")
 
-        print(data1)
 
         conn.commit()
 
@@ -73,13 +78,15 @@ def viewMyFlights():
 
         current_date = datetime.datetime.now()
 
-        query = "select * from ticket natural join purchases natural join flight  join booking_agent  where booking_agent.email =  %s and flight.departure_time > %s"
+        query = "select * from ticket join purchases  on purchases.ticket_id = ticket.ticket_id join flight on flight.flight_num = ticket.flight_num "\
+                "natural join booking_agent  where booking_agent.email =  %s and flight.departure_time > %s"
 
         cursor.execute(query, (email, current_date))
 
         data1 = cursor.fetchall()
 
         print(data1)
+
 
         conn.commit()
 
