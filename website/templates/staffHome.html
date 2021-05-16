@@ -1,75 +1,136 @@
 {% extends 'layout.html' %} {% block body %}
-<nav class="navbar navbar-light" style="background-color: #e3f2fd">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="#">StaffHome</a>
-    <button
-      class="navbar-toggler"
-      type="button"
-      data-bs-toggle="collapse"
-      data-bs-target="#navbarSupportedContent"
-      aria-controls="navbarSupportedContent"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-    >
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link active" href="/staffHome">Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" href="/flightManage">Flights Management</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" href="/airSystemManage/airplane"
-            >Airplanes Management</a
-          >
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" href="/airSystemManage/airport"
-            >Airports Management</a
-          >
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" href="/report/topAgent"
-            >View Top Booking Agents</a
-          >
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" href="/report/topCustomer"
-            >View Top Customers</a
-          >
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" href="/report/salesReport/default"
-            >View Reports</a
-          >
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" href="/report/revenueCompare"
-            >Revenue Comparison</a
-          >
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" href="/report/topDestination"
-            >Top Destination</a
-          >
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" href="/logout">Log out</a>
-        </li>
-      </ul>
-    </div>
-  </div>
-</nav>
+
+<nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">StaffHome</a>
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          </ul>
+        </div>
+    </nav>
 
 {% if not error %}
 
-<div class="content">
-  <div class="title">Welcome, {{username}}.</div>
+
+<div class="row">
+
+  <div class="col">
+<!--    New Airport-->
+<div class="card" style="width: 18rem;">
+  <img src= "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fbpic.588ku.com%2Felement_origin_min_pic%2F16%2F11%2F11%2F83969b96e08186d3aed2da5724aa6e67.jpg&refer=http%3A%2F%2Fbpic.588ku.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1623690315&t=3671cd1576389497edac588a9700651f"
+       class="card-img-top img-responsive"  alt="add airport">
+  <div class="card-body">
+    <p class="card-text"> View and add airports.</p>
+    <a href="/airSystemManage/airport" class="btn btn-primary">Airport Management</a>
+  </div>
 </div>
-{% endif %} {% if error %}
+    </div>
+
+<!--  airplane-->
+  <div class="col">
+<div class="card" style="width: 18rem;">
+  <img src=https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fwww.juimg.com%2Ftuku%2Fyulantu%2F140112%2F328648-14011213253758.jpg&refer=http%3A%2F%2Fwww.juimg.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1623729820&t=a59952615a3005f6db7df0e339a4de2b
+       class="card-img-top img-responsive"  alt="add airport">
+  <div class="card-body">
+    <p class="card-text"> View and add airplanes.</p>
+    <a href="/airSystemManage/airplane" class="btn btn-primary">Airplane Management</a>
+  </div>
+</div>
+    </div>
+
+<!--    View and add flight-->
+    <div class="col">
+<div class="card" style="width: 18rem;">
+  <img src=https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fku.90sjimg.com%2Felement_origin_min_pic%2F17%2F09%2F18%2Fa348d81d274a6d14e0a6583eb6617edf.jpg%21%2Ffwfh%2F804x723%2Fquality%2F90%2Funsharp%2Ftrue%2Fcompress%2Ftrue&refer=http%3A%2F%2Fku.90sjimg.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1623690526&t=a023541c3bd40919f3ab71b562115bf0
+       class="card-img-top img-responsive"  alt="add airport">
+  <div class="card-body">
+    <p class="card-text"> (1)Showing all the upcoming flights.
+      (2)Search and view Flights
+      (3)See all the customers of a particular flight.</p>
+    <a href="/flightManage" class="btn btn-primary">Flight Management</a>
+  </div>
+</div>
+      </div>
+  </div>
+
+
+<!--View Top Booking Agents-->
+
+  <div class="row">
+      <div class="col">
+        <div class="card" style="width: 18rem;">
+          <img src=https://ss2.baidu.com/-vo3dSag_xI4khGko9WTAnF6hhy/baike/pic/item/0bd162d9f2d3572cccd9e37f8a13632762d0c35e.jpg
+       class="card-img-top img-responsive"  alt="add airport">
+  <div class="card-body">
+    <p class="card-text"> (1) Top 5 booking agents based on number of tickets sales.
+  (2)Top 5 booking agents based on the amount of commission.</p>
+    <a href="/report/topAgent" class="btn btn-primary">Top Booking Agents</a>
+  </div>
+</div>
+        </div>
+
+        <!--    View top customer-->
+    <div class="col">
+<div class="card" style="width: 18rem;">
+<img src=https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fphotocdn.sohu.com%2F20120508%2FImg342635226.jpg&refer=http%3A%2F%2Fphotocdn.sohu.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1623730041&t=3fea40fd828f205131c0ee447f41efcc
+       class="card-img-top img-responsive"  alt="add airport">
+  <div class="card-body">
+    <p class="card-text"> (1)See the most frequent customer within the last year.
+      (2)See a list of all flights a particular Customer has taken only on that particular airline.</p>
+    <a href="/report/topCustomer" class="btn btn-primary">View Top Customers</a>
+  </div>
+</div>
+      </div>
+
+      <!--    View report-->
+    <div class="col">
+<div class="card" style="width: 18rem;">
+  <img src=https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fpic.90sjimg.com%2Fdesign%2F00%2F67%2F59%2F63%2F59378b3337a0d.png&refer=http%3A%2F%2Fpic.90sjimg.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1623730108&t=0c9b5a452148b55a0f2fb2c4d20cea21
+       class="card-img-top img-responsive"  alt="add airport">
+  <div class="card-body">
+    <p class="card-text"> (1)Total amounts of ticket sold based on range of dates/last year/last month etc.
+      (2)Month wise tickets sold in a bar chart.</p>
+    <a href="/report/salesReport/default" class="btn btn-primary">View Reports</a>
+  </div>
+</div>
+      </div>
+    </div>
+
+
+  <div class="row">
+<!--    View revenue comparison-->
+    <div class="col">
+<div class="card" style="width: 18rem;">
+  <img src=https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fbpic.588ku.com%2Felement_origin_min_pic%2F17%2F04%2F12%2F7eb3a51a7934c7fb2c896b78c5a6d9c4.jpg&refer=http%3A%2F%2Fbpic.588ku.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1623730185&t=80ad15996abd1d64c9f50a1afe1f7ae4
+       class="card-img-top img-responsive"  alt="add airport">
+  <div class="card-body">
+    <p class="card-text"> Compare total amount of revenue earned from direct
+sales and the ones from the indirect sales in the last month and last year</p>
+    <a href="/report/revenueCompare" class="btn btn-primary">Revenue Comparison</a>
+  </div>
+</div>
+      </div>
+
+
+            <!--    View Top Destination-->
+          <div class="col">
+<div class="card" style="width: 18rem;">
+  <img src=https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fn.sinaimg.cn%2Fsinakd20200725ac%2F340%2Fw688h452%2F20200725%2F2870-iwtqvym2394725.jpg&refer=http%3A%2F%2Fn.sinaimg.cn&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1623730257&t=4dc8f7f87a896ced2268e93bcbc0663a
+       class="card-img-top img-responsive"  alt="add airport">
+  <div class="card-body">
+    <p class="card-text"> Top 3 most popular destinations for last 3 months and last year.</p>
+    <a href="/report/topDestination" class="btn btn-primary">Top Destination</a>
+  </div>
+</div>
+      </div>
+  </div>
+
+
+{% endif %}
+      <a href="/logout" class="back">Log out</a>
+
+
+
+{% if error %}
 <p class="error"><strong>Error:</strong> {{error}}</p>
 <a href="/login">Go back to Login</a>
 {% endif %} {% endblock %}

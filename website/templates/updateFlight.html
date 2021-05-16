@@ -1,69 +1,12 @@
 {% extends 'layout.html' %} {% block body %}
 
-<nav class="navbar navbar-light" style="background-color: #e3f2fd">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="#">StaffHome</a>
-    <button
-      class="navbar-toggler"
-      type="button"
-      data-bs-toggle="collapse"
-      data-bs-target="#navbarSupportedContent"
-      aria-controls="navbarSupportedContent"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-    >
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link active" href="/staffHome">Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" href="/flightManage">Flights Management</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" href="/airSystemManage/airplane"
-            >Airplanes Management</a
-          >
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" href="/airSystemManage/airport"
-            >Airports Management</a
-          >
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" href="/report/topAgent"
-            >View Top Booking Agents</a
-          >
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" href="/report/topCustomer"
-            >View Top Customers</a
-          >
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" href="/report/salesReport/default"
-            >View Reports</a
-          >
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" href="/report/revenueCompare"
-            >Revenue Comparison</a
-          >
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" href="/report/topDestination"
-            >Top Destination</a
-          >
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" href="/logout">Log out</a>
-        </li>
-      </ul>
-    </div>
-  </div>
-</nav>
+<nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="/staffHome">StaffHome</a>
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          </ul>
+        </div>
+    </nav>
 
 {% if flight %}
 <div class="content">

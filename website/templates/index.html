@@ -23,11 +23,17 @@
 
 {% endif %}
 
-<div class ="bigButtons">
-    <div onclick = "search()" class="bigButton chosen" id = "searchButton">Search Flights</div>
-    <div onclick = "check()" class="bigButton" id = "checkButton" >Check Flight Status</div>
-</div>
+<!--<div class ="bigButtons">-->
+<!--    <div onclick = "search()" class="bigButton chosen" id = "searchButton">Search Flights</div>-->
+<!--    <div onclick = "check()" class="bigButton" id = "checkButton" >Check Flight Status</div>-->
+<!--</div>-->
 
+
+<div class="container">
+  <div class="row">
+    <div class="col-sm">
+
+<h5>Search Flights</h5>
 <div id="searchBlock">
     <div onclick="oneWay()" class="smallButton active" id="oneWayButton">One Way</div>
     <div onclick="roundTrip()" class="smallButton" id="roundTripButton">Round Trip</div>
@@ -51,7 +57,11 @@
         <input type="submit" value = "Search"> <br>
     </form>
 </div>
+</div>
 
+
+      <div class="col-sm">
+<h5>Check Flights</h5>
 <div id="checkBlock">
     <form action="/check_for_flights" method="POST" onsubmit="return validate();">
         <div class="inputBlock">
@@ -74,6 +84,11 @@
         <input type="submit" value = "Search"> <br>
     </form>
 </div>
+</div>
+  </div>
+</div>
+
+
 
 {% if error %}
     <div class="prompt"> {{error}}</div>

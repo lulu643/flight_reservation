@@ -11,15 +11,16 @@ staff = Blueprint('staff', __name__)
 def staffHome():
     # fetch data from session
     username = session["username"]
-    cursor = conn.cursor()
-    query = 'SELECT first_name, last_name, airline_name FROM airline_staff WHERE username = %s'
-    cursor.execute(query, (username))
-    data = cursor.fetchone()
-    cursor.close()
-    # debugging
-    print(data["first_name"], data["last_name"], data["airline_name"])
-    cursor.close()
-    return render_template("staffHome.html", username=username, info=data)
+    # cursor = conn.cursor()
+    # query = 'SELECT first_name, last_name, airline_name FROM airline_staff WHERE username = %s'
+    # cursor.execute(query, (username))
+    # data = cursor.fetchone()
+    # cursor.close()
+    # # debugging
+    # print(data["first_name"], data["last_name"], data["airline_name"])
+    # cursor.close()
+    # return render_template("staffHome.html", username=username, info=data)
+    return render_template("staffHome.html", username=username)
 
 
 @staff.route('/flightManage', methods=['GET', 'POST'])
@@ -57,6 +58,7 @@ def viewFlight():
         cursor.execute(query, (airline_name))
         data1 = cursor.fetchall()
         cursor.close()
+        print(data1)
         default = "Default: Future 30 Days"
         msg = "Default: Future 30 Days"
 
@@ -305,7 +307,7 @@ def viewTopAgent():
                 return render_template("report.html", noFound=noFound)
         else:
             title = "Top 5 booking agents by total commission for the past year"
-            query = "SELECT booking_agent_id, SUM(price) * 0.1 AS commission FROM purchases NATURAL JOIN ticket NATURAL JOIN flight\
+            query = "SELECT booking_agent_id, SUM(price) AS commission FROM purchases NATURAL JOIN ticket NATURAL JOIN flight\
                      WHERE booking_agent_id IS NOT NULL AND DATE(purchase_date) BETWEEN NOW() - INTERVAL 1 YEAR AND NOW()\
                      GROUP BY booking_agent_id ORDER BY commission DESC LIMIT 5"
             cursor.execute(query)
@@ -333,6 +335,7 @@ def viewTopAgent():
                 print(each)
             return render_template("report.html", by_sales=data)
         else:
+            print('not found')
             noFound = "There is an issue in displaying the information you want."
             return render_template("report.html", noFound=noFound)
 
