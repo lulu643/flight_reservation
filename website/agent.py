@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, session
+from flask import Blueprint, render_template, request, session, flash
 from .DB_connector import conn
 from .login_required import agent_login_required
 import datetime
@@ -62,7 +62,7 @@ def topCustomers():
     labels = []
     values = []
     for each in data:
-        labels.append(each['cust_email'])
+        labels.append(each['customer_email'])
         values.append(each['num'])
     try:
         mymax = max(values)
@@ -76,7 +76,7 @@ def topCustomers():
     labels2 = []
     values2 = []
     for each in data2:
-        labels2.append(each['cust_email'])
+        labels2.append(each['customer_email'])
         values2.append(float(each['sum']) / 10)
     try:
         mymax2 = max(values2)

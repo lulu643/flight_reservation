@@ -1,10 +1,16 @@
-{% extends 'layout.html' %}
-
-{% block body %}
-<nav class="navbar navbar-light" style="background-color: #e3f2fd;">
+{% extends 'layout.html' %} {% block body %}
+<nav class="navbar navbar-light" style="background-color: #e3f2fd">
   <div class="container-fluid">
     <a class="navbar-brand" href="#">AgentHome</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -13,18 +19,25 @@
           <a class="nav-link active" href="/agentHome">Home</a>
         </li>
         <li class="nav-item">
+          <a class="nav-link active" href="/purchaseTickets"
+            >Purchase Tickets</a
+          >
+        </li>
+        <li class="nav-item">
           <a class="nav-link active" href="/viewMyFlights">view flights</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link active" href="/searchForFlights">Searching Flights</a>
+          <a class="nav-link active" href="/searchForFlights"
+            >Searching Flights</a
+          >
         </li>
-          <li class="nav-item">
+        <li class="nav-item">
           <a class="nav-link active" href="/commission">View My Comission</a>
         </li>
-          <li class="nav-item">
+        <li class="nav-item">
           <a class="nav-link active" href="/topCustomers">Top Customers</a>
         </li>
-          <li class="nav-item">
+        <li class="nav-item">
           <a class="nav-link active" href="/logout">Log out</a>
         </li>
       </ul>
@@ -33,94 +46,96 @@
 </nav>
 
 <div class="container">
-<div class="content">
+  <div class="content">
     <div class="title"><h1>Top Customers</h1></div>
-    <div class="prompt">Top Customers (num of tickets) in last 6 months: </div>
+    <div class="prompt">Top Customers (num of tickets) in last 6 months:</div>
     <div class="spending canvas">
-            <canvas id="chart" width="600" height="400"></canvas>
-            <script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js'></script>
-            <script>
-                // bar chart data
-                var barData = {
-                labels : [
-                    {% for item in labels %}
+      <canvas id="chart" width="600" height="400"></canvas>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
+      <script>
+            // bar chart data
+            var barData = {
+            labels : [
+                {% for item in labels %}
+                "{{ item }}",
+                {% endfor %}
+        ],
+            datasets : [{
+                fillColor: "rgba(151,187,205,0.2)",
+                strokeColor: "rgba(151,187,205,1)",
+                pointColor: "rgba(151,187,205,1)",
+                data : [
+                {% for item in values %}
                     "{{ item }}",
                     {% endfor %}
-            ],
-                datasets : [{
-                    fillColor: "rgba(151,187,205,0.2)",
-                    strokeColor: "rgba(151,187,205,1)",
-                    pointColor: "rgba(151,187,205,1)",
-                    data : [
-                    {% for item in values %}
-                        "{{ item }}",
-                        {% endfor %}
-                ]
-                    }
-                ]
+            ]
                 }
-                // get bar chart canvas
-                var mychart = document.getElementById("chart").getContext("2d");
-                max = {{max}};
-                steps = 2;
-                // draw bar chart
-                new Chart(mychart).Bar(barData, {
-                scaleOverride: true,
-                scaleSteps: steps,
-                scaleStepWidth: Math.ceil(max / steps),
-                scaleStartValue: 0,
-                scaleShowVerticalLines: true,
-                scaleShowGridLines : true,
-                barShowStroke : true,
-                scaleShowLabels: true
-                }
-                );
-            </script>
+            ]
+            }
+            // get bar chart canvas
+            var mychart = document.getElementById("chart").getContext("2d");
+            max = {{max}};
+            steps = 2;
+            // draw bar chart
+            new Chart(mychart).Bar(barData, {
+            scaleOverride: true,
+            scaleSteps: steps,
+            scaleStepWidth: Math.ceil(max / steps),
+            scaleStartValue: 0,
+            scaleShowVerticalLines: true,
+            scaleShowGridLines : true,
+            barShowStroke : true,
+            scaleShowLabels: true
+            }
+            );
+      </script>
     </div>
 
-    <div class="prompt">Top Customers (sum of commission) in the last year: </div>
+    <div class="prompt">
+      Top Customers (sum of commission) in the last year:
+    </div>
     <div class="spending canvas">
-            <canvas id="chart2" width="600" height="400"></canvas>
-            <script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js'></script>
-            <script>
-                // bar chart data
-                var barData = {
-                labels : [
-                    {% for item in labels2 %}
+      <canvas id="chart2" width="600" height="400"></canvas>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
+      <script>
+            // bar chart data
+            var barData = {
+            labels : [
+                {% for item in labels2 %}
+                "{{ item }}",
+                {% endfor %}
+        ],
+            datasets : [{
+                fillColor: "rgba(151,187,205,0.2)",
+                strokeColor: "rgba(151,187,205,1)",
+                pointColor: "rgba(151,187,205,1)",
+                data : [
+                {% for item in values2 %}
                     "{{ item }}",
                     {% endfor %}
-            ],
-                datasets : [{
-                    fillColor: "rgba(151,187,205,0.2)",
-                    strokeColor: "rgba(151,187,205,1)",
-                    pointColor: "rgba(151,187,205,1)",
-                    data : [
-                    {% for item in values2 %}
-                        "{{ item }}",
-                        {% endfor %}
-                ]
-                    }
-                ]
+            ]
                 }
-                // get bar chart canvas
-                var mychart = document.getElementById("chart2").getContext("2d");
-                max = {{max2}};
-                steps = 10;
-                // draw bar chart
-                new Chart(mychart).Bar(barData, {
-                scaleOverride: true,
-                scaleSteps: steps,
-                scaleStepWidth: Math.ceil(max / steps),
-                scaleStartValue: 0,
-                scaleShowVerticalLines: true,
-                scaleShowGridLines : true,
-                barShowStroke : true,
-                scaleShowLabels: true
-                }
-                );
-            </script>
+            ]
+            }
+            // get bar chart canvas
+            var mychart = document.getElementById("chart2").getContext("2d");
+            max = {{max2}};
+            steps = 10;
+            // draw bar chart
+            new Chart(mychart).Bar(barData, {
+            scaleOverride: true,
+            scaleSteps: steps,
+            scaleStepWidth: Math.ceil(max / steps),
+            scaleStartValue: 0,
+            scaleShowVerticalLines: true,
+            scaleShowGridLines : true,
+            barShowStroke : true,
+            scaleShowLabels: true
+            }
+            );
+      </script>
     </div>
-</div>
+  </div>
 </div>
 
 {% endblock %}

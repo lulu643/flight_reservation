@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, session, url_for, redirect
+from flask import Blueprint, render_template, request, session, url_for, redirect, flash
 from .DB_connector import conn
 from passlib.hash import sha256_crypt
 
@@ -152,7 +152,8 @@ def registerCustomer():
     data = cursor.fetchone()
 
 
-
+    if data:
+        return render_template("register.html", error = "THIS USER ALREADY EXISTS")
 
     q = 'INSERT INTO customer VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'
     cursor.execute(q, (email,name, password,  building_number, street, city, state, phone_number, passport_number, passport_expiration, passport_country, date_of_birth))
@@ -173,6 +174,9 @@ def registerAuthAgent():
     cursor.execute(query, (email))
     # stores the results in a variable
     data = cursor.fetchone()
+    if data:
+        return render_template("register.html", error = "THIS USER ALREADY EXISTS")
+
     query = 'SELECT * FROM booking_agent WHERE booking_agent_id = %s'
     cursor.execute(query, (agent_id))
     data2 = cursor.fetchone()

@@ -40,8 +40,10 @@ def logout():
 @customer.route('/viewMyFlights')
 @customer_or_agent_login_required
 def viewMyFlights():
+    cursor = conn.cursor()
 
     if session['role'] == 'customer':
+
 
         email = session['email']
 
@@ -49,21 +51,25 @@ def viewMyFlights():
 
         current_date = datetime.datetime.now()
 
-        query = "select * from ticket natural join purchases join flight  where customer_email = %s and departure_time > %s"
+        query = "select * from purchases natural join ticket"\
+                " join flight on flight.flight_num= ticket.flight_num where purchases.customer_email = %s and flight.departure_time > %s"
 
         cursor.execute(query, (email, current_date))
 
         data1 = cursor.fetchall()
 
+        print("THIS IS DATA")
+        print("STARTS HERE")
+        for i in data1:
+            print("THIS\n",i)
 
+        print("ENDS HERE")
 
-        print(data1)
 
         conn.commit()
 
         cursor.close()
 
-        return render_template('viewMyFlights.html', flights=data1, role='customer')
     elif session['role'] == 'agent':
 
         email = session['email']
@@ -72,17 +78,22 @@ def viewMyFlights():
 
         current_date = datetime.datetime.now()
 
-        query = "select * from ticket natural join purchases join flight  where customer_email = %s and departure_time > %s"
+        query = "select * from ticket join purchases  on purchases.ticket_id = ticket.ticket_id join flight on flight.flight_num = ticket.flight_num "\
+                "natural join booking_agent  where booking_agent.email =  %s and flight.departure_time > %s"
 
         cursor.execute(query, (email, current_date))
 
         data1 = cursor.fetchall()
 
+        print(data1)
+
+
         conn.commit()
 
         cursor.close()
 
-        return render_template('viewMyFlights.html', flights=data1, role='agent')
+    return render_template('viewMyFlights.html', flights=data1, role=session["role"])
+
 
 
 @customer.route('/searchForFlights')
@@ -125,7 +136,7 @@ def search_for_flights():
     if return_date:
         if datetime.datetime.strptime(dept_date, "%Y-%m-%d") > datetime.datetime.strptime(return_date, "%Y-%m-%d"):
             return render_template("searchForFlights.html", error="The dates you entered are invalid.")
-        query2 = "select * from flight natural join airplane, airport as A, airport as B where flight.departure_airport = A.airport_name and flight.arrival_airport = B.airport_name and (A.airport_name = %s or A.airport_city = %s) and (B.airport_name = %s or B.airport_city = %s) and date(dept_time) = %s "
+        query2 = "select * from flight natural join airplane, airport as A, airport as B where flight.departure_airport = A.airport_name and flight.arrival_airport = B.airport_name and (A.airport_name = %s or A.airport_city = %s) and (B.airport_name = %s or B.airport_city = %s) and date(departure_time) = %s "
         cursor.execute(query2, (arrival_airport, arrival_airport, departure_airport, departure_airport, return_date))
 
     # store the results
@@ -167,15 +178,13 @@ def purchaseTickets():
     data_1 = ' '
     if request.method == 'POST':
 
-
-
-
+        customer_email = request.form['customer_email']
         airline_name = request.form['airline_name']
         print("HERERERRRERRERRERRRERE\n",airline_name )
         flight_num = request.form['flight_num']
         print("FLight_NUM\n", type(flight_num))
 
-        customer_email = session['email']
+
 
         ##customer_email = request.form['customer_email']
 
@@ -204,7 +213,7 @@ def purchaseTickets():
         cursor.close()
 
 
-    return render_template("purchaseTickets.html", flight = data_1)
+    return render_template("purchaseTickets.html", flight = data_1, role=session["role"])
 
 
 

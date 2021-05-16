@@ -1,33 +1,71 @@
 {% extends 'layout.html' %}
 
-{% block head %}
-
-{% endblock %}
 {% block body %}
-<div class="topBar">
-    <div class="logo">Airline Ticket System</div>
-</div>
 
-<div class="line"></div>
-<div class="container">
+
     {%if role == 'agent' %}
-    <div class="sidebar">
-        <a href="/agentHome" class="option">Home</a>
-        <a href="/viewMyFlights" class="option">View My Flights</a>
-        <a href="/searchForFlights" class="option">Search for Flights</a>
-        <a href="/commission" class="option">View My Comission</a>
-        <a href="/topCustomers" class="option">Top Customers</a>
-        <a href="/logout" class="option">Log out</a>
+<nav class="navbar navbar-light" style="background-color: #e3f2fd;">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">AgentHome</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" href="/agentHome">Home</a>
+        </li>
+          <li class="nav-item">
+          <a class="nav-link active" href='/purchaseTickets'>Purchase Tickets</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="/viewMyFlights">view flights</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="/searchForFlights">Searching Flights</a>
+        </li>
+          <li class="nav-item">
+          <a class="nav-link active" href="/commission">View My Comission</a>
+        </li>
+          <li class="nav-item">
+          <a class="nav-link active" href="/topCustomers">Top Customers</a>
+        </li>
+          <li class="nav-item">
+          <a class="nav-link active" href="/logout">Log out</a>
+        </li>
+      </ul>
     </div>
+  </div>
+</nav>
     {% else %}
-    <div class="sidebar">
-        <a href="/customerHome" class="option">Home</a>
-        <a href="/viewMyFlights" class="option">View My Flights</a>
-        <a href="/searchForFlights" class="option">Search for Flights</a>
-        <a href="/comments" class="option">Give Comments</a>
-        <a href="/trackMySpending" class="option">Track My Spending</a>
-        <a href="/logout" class="option">Log out</a>
+
+<nav class="navbar navbar-light" style="background-color: #e3f2fd;">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">CustomerHome</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent2">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" href="/customerHome">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/viewMyFlights">View My Flights</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/searchForFlights">Search for Flights</a>
+        </li>
+          <li class="nav-item">
+          <a class="nav-link" href="/trackMySpending" >Track My Spending</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/logout">Log out</a>
+        </li>
+      </ul>
     </div>
+  </div>
+</nav>
     {% endif %}
 
     <div class="content">
@@ -115,7 +153,7 @@
             <p class="error"><strong>Error:</strong> {{error}}</p>
         {% endif %}
     </div>
-</div>
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="{{ url_for('static',filename='js/script.js')}}"></script>
 <script src="{{ url_for('static',filename='js/purchase.js')}}"></script>

@@ -1,45 +1,63 @@
 {% extends 'layout.html' %}
 
-{% block head %}
-
-{% endblock %}
-
 {% block body %}
-<div class="topBar">
-        <div class="logo">Airline Ticket System</div>
-</div>
 
-<div class="line"></div>
-<div class="title">Login</div>
+
+<nav class="navbar navbar-light" style="background-color: #e3f2fd;">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Login</a>
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          </ul>
+    </div>
+    </nav>
+
+
+
+
 <div class="wrapper">
-    <select name="role" id = "mySelect" onchange="changeRole()">
-        <option value="customer" selected>Customer</option>
-        <option value="agent">Booking Agent</option>
-        <option value="staff">Airline Staff</option>
-    </select>
+<!--    <select name="role" id = "mySelect" onchange="changeRole()">-->
+<!--        <option value="customer" selected>Customer</option>-->
+<!--        <option value="agent">Booking Agent</option>-->
+<!--        <option value="staff">Airline Staff</option>-->
+<!--    </select>-->
 
+    <div class="container">
+  <div class="row">
+    <div class="col-sm">
+
+    <h5>Customer Login</h5>
     <form action="/loginCustomer" id = "customerForm" method="POST" onsubmit="return checkForm();">
         <input class="login" type="text" name = "email" placeholder="email"/> </br>
         <input class="login" type="password" name = "password" placeholder="password"/></br>
         <input class="login" type="submit" value = Login />
     </form>
+ </div>
 
+    <div class="col-sm">
+    <h5>Agent Login</h5>
     <form action="/loginAuthAgent" id = "agentForm" method="POST" onsubmit="return checkForm();">
         <input class="login" type="text" name = "email" placeholder="email"/> </br>
         <input class="login" type="password" name = "password" placeholder="password"/></br>
         <input class="login" type="submit" value = Login />
     </form>
+         </div>
 
+ <div class="col-sm">
+    <h5>Staff Login</h5>
     <form action="/loginAuthStaff" id = "staffForm" method="POST" onsubmit="return checkForm();">
         <input class="login" type="text" name = "username" placeholder="username"/> </br>
         <input class="login" type="password" name = "password" placeholder="password"/></br>
         <input class="login" type="submit" value = Login />
     </form>
+      </div>
+  </div>
+</div>
+
 
     <a href="/" class="back">Back</a>
     {% if error %}
             <p><strong>Error:</strong> {{error}}</p>
     {% endif %}
 </div>
-    <script src="{{ url_for('static',filename='js/login.js')}}"></script>
+
 {% endblock %}

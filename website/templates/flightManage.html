@@ -2,54 +2,17 @@
 
 {% block body %}
 
+<nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="/staffHome">StaffHome</a>
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          </ul>
+        </div>
+    </nav>
 
-<nav class="navbar navbar-light" style="background-color: #e3f2fd;">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="#">StaffHome</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link active" href="/staffHome">Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" href="/flightManage">Flights Management</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" href="/airSystemManage/airplane">Airplanes Management</a>
-        </li>
-          <li class="nav-item">
-          <a class="nav-link active" href="/airSystemManage/airport">Airports Management</a>
-        </li>
-          <li class="nav-item">
-          <a class="nav-link active" href="/flightManage">View Ratings</a>
-        </li>
-          <li class="nav-item">
-          <a class="nav-link active" href="/report/topAgent">View Top Booking Agents</a>
-        </li>
-          <li class="nav-item">
-          <a class="nav-link active" href="/report/topCustomer">View Top Customers</a>
-        </li>
-         <li class="nav-item">
-          <a class="nav-link active" href="/report/salesReport/default">View Reports</a>
-        </li>
-         <li class="nav-item">
-          <a class="nav-link active" href="/report/revenueCompare">Revenue Comparison</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" href="/report/topDestination">Top Destination</a>
-        </li>
-          <li class="nav-item">
-          <a class="nav-link active" href="/logout">Log out</a>
-        </li>
-      </ul>
-    </div>
-  </div>
-</nav>
+<div class="row">
 
-
+  <div class="col">
 <div class="content">
     <div class="title staff">Flights Operated by {{session["airline_name"]}} </div>
     <div class = "condition panel">
@@ -57,23 +20,27 @@
             <h4> View Options </h4>
             <div class="inputBlock">
                 <label for="dept_from">place of departure:</label>
-                <input type="text" name = "dept_from" required/> </br>
+                <input type="text" name = "dept_from" required id="dept_from"/> </br>
             </div>
             <div class="inputBlock">
                 <label for="arr_at">destination:</label>
-                <input type="text" name = "arr_at" required/></br>
+                <input type="text" name = "arr_at" required id="arr_at"/></br>
             </div>
             <div class="inputBlock">
                 <label for="start_date">departure start date:</label>
-                <input type="date" name = "start_date" required/></br>
+                <input type="date" name = "start_date" required id="start_date"/></br>
             </div>
             <div class="inputBlock">
                 <label for="end_date">departure end date:</label>
-                <input type="date" name = "end_date" required/></br>
+                <input type="date" name = "end_date" required id="end_date"/></br>
             </div>
             <input type="submit" value = View> <br>
         </form>
     </div>
+</div>
+
+
+  <div class="col">
 
     <div class = "flight_info">
         {% if default%}
@@ -85,43 +52,60 @@
             {% else %}
             <h4> Departure From: {{msg[0]}}; Arrive at {{msg[1]}}; Start Date {{msg[2]}}; End Date {{msg[3]}} </h4>
             {% endif %}
-        <table>
-                <th> Airline Name </th>
-                <th> Flight Number </th>
-                <th> Departure Time </th>
-                <th> Arrival Time </th>
-                <th> Base Price </th>
-                <th> Flight Status </th>
-                <th> Departure from </th>
-                <th> Arrive at </th>
-                <th> Airplane ID </th>
-                <th> Actions </th>
-                <th> Passengers </th>
-                <th> Ratings </th>
-            {% for line in flights %}
-                <tr>
-                    <td>{{line['airline_name']}}</td>
-                    <td>{{line['flight_num']}}</td>
-                    <td>{{line['dept_time']}}</td>
-                    <td>{{line['arr_time']}}</td>
-                    <td>{{line['base_price']}}</td>
-                    <td>{{line['flight_status']}}</td>
-                    <td>{{line['dept_from']}}</td>
-                    <td>{{line['arr_at']}}</td>
-                    <td>{{line['airplane_id']}}</td>
-                    <td>
-                        <a href = "/updateFlight/{{line['flight_num']}}/{{line['dept_time']}}"> Update Flight </a>
-                    </td>
-                    <td>
-                        <a href = "/viewPassengers/{{line['flight_num']}}/{{line['dept_time']}}"> View Passengers </a>
-                    </td>
-                    <td>
-                        <a href = "/report/viewRatings/{{line['flight_num']}}/{{line['dept_time']}}"> View Ratings </a>
-                    </td>
-                </tr>
+        <!--    table for displaying-->
+        {% for line in flights %}
+    <table class="table table-sm">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">First</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row">Airline Name</th>
+      <td>{{line['airline_name']}}</td>
+    </tr>
+    <tr>
+      <th scope="row">Flight Number</th>
+      <td>{{line['flight_num']}}</td>
+    </tr>
+    <tr>
+      <th scope="row">Departure Time</th>
+      <td>{{line['departure_time']}}</td>
+    </tr>
+   <tr>
+      <th scope="row">Arrival Time</th>
+      <td>{{line['arrival_time']}}</td>
+    </tr>
+   <tr>
+      <th scope="row">Base Price</th>
+      <td>{{line['price']}}</td>
+    </tr>
+   <tr>
+      <th scope="row">Flight Status</th>
+      <td>{{line['status']}}</td>
+    </tr>
+  <tr>
+      <th scope="row">Departure from</th>
+      <td>{{line['departure_airport']}}</td>
+    </tr>
+  <tr>
+      <th scope="row">Arrive at</th>
+      <td>{{line['arrival_airport']}}</td>
+    </tr>
+    <tr>
+      <th scope="row">Airplane ID</th>
+      <td>{{line['airplane_id']}}</td>
+    </tr>
+    <tr>
+      <th scope="row">Update Flights</th>
+      <td> <a href = "/updateFlight/{{line['flight_num']}}#"> Update Flight </a></td>
+    </tr>
+  </tbody>
+</table>
             {% endfor %}
         {% endif %}
-        </table>
 
         {% if error %}
         <p class="noFound"><strong>Error:</strong> {{error}}</p>
@@ -133,42 +117,46 @@
         <a href='/flightManage'>Go back to Default </a>
         {% endif %}
     </div>
+  </div>
+
+  <div class="col">
 
     <div class = "add_flight">
         <h4> Add New Flights </h4>
         <form action = "/addFlight" method = "POST">
             <div class="inputBlock">
                 <label for="flight_num1">flight number:</label>
-                <input type="text" name = "flight_num1" required/> </br>
+                <input type="text" name = "flight_num1" required id="flight_num1"/> <br>
             </div>
             <div class="inputBlock">
                 <label for="dept_time1">departure time:</label>
-                <input type="datetime-local" step = "1" name = "dept_time1" required/></br>
+                <input type="datetime-local" step = "1" name = "dept_time1" required id="dept_time1"/><br>
             </div>
             <div class="inputBlock">
                 <label for="arr_time1">arrival time:</label>
-                <input type="datetime-local" step = "1" name = "arr_time1" required/></br>
+                <input type="datetime-local" step = "1" name = "arr_time1" required id="arr_time1"/><br>
             </div>
             <div class="inputBlock">
                 <label for="base_price1">base price:</label>
-                <input type="text" name = "base_price1" required/> </br>
+                <input type="text" name = "base_price1" required id="base_price1"/> <br>
             </div>
             <div class="inputBlock">
                 <label for="dept_from1">place of departure:</label>
-                <input type="text" name = "dept_from1" required/> </br>
+                <input type="text" name = "dept_from1" required id="dept_from1"/> <br>
             </div>
             <div class="inputBlock">
                 <label for="arr_at1">destination:</label>
-                <input type="text" name = "arr_at1" required/></br>
+                <input type="text" name = "arr_at1" required id="arr_at1"/><br>
             </div>
             <div class="inputBlock">
                 <label for="airplane_id1">airplane id:</label>
-                <input type="text" name = "airplane_id1" required/></br>
+                <input type="text" name = "airplane_id1" required id="airplane_id1"/><br>
             </div>
             <input type="submit" value = Add> <br>
         </form>
     </div>
 </div>
+  </div>
     <script>
         {% if session["flight_created"] == True %}
         alert("Flight Creation Successful!");
@@ -181,5 +169,4 @@
         {% endif %}
     </script>
 
-    <script src="{{ url_for('static',filename='js/script.js')}}"></script>
 {% endblock %}
